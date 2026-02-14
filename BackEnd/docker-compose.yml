@@ -1,43 +1,22 @@
+version: "3.8"
+
 services:
-  # ==========================
-  # MySQL
-  # ==========================
   mysql:
     image: mysql:8.0
-    container_name: tp-BackEnd-Final
+    container_name: patitas_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_ROOT_PASSWORD: rootpassword
       MYSQL_DATABASE: patitas_felices
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppassword
-      MYSQL_ROOT_HOST: "%"
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpassword
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - patitas_network
-    healthcheck:
-      test:
-        [
-          "CMD",
-          "mysqladmin",
-          "ping",
-          "-h",
-          "localhost",
-          "-u",
-          "root",
-          "-proot123",
-        ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
-  # ==========================
-  # phpMyAdmin
-  # ==========================
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     container_name: patitas_phpmyadmin
@@ -45,26 +24,17 @@ services:
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
-      PMA_USER: appuser
-      PMA_PASSWORD: apppassword
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
     ports:
       - "8080:80"
     depends_on:
-      mysql:
-        condition: service_healthy
+      - mysql
     networks:
       - patitas_network
 
-# ==========================
-# Volúmenes
-# ==========================
 volumes:
   mysql_data:
-    driver: local
 
-# ==========================
-# Redes
-# ==========================
 networks:
   patitas_network:
-    driver: bridge
