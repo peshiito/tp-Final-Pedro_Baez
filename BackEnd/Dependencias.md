@@ -94,3 +94,43 @@ curl -X POST http://localhost:3000/api/auth/login \
 ### Guardar token del veterinario
 
 export VET_TOKEN="token_del_veterinario"
+
+# COSAS QUE ME PASO DEEPSEK
+
+# 1. Login como admin
+
+TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@veterinaria.com","password":"admin123"}' | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
+
+echo "Token: $TOKEN"
+
+# 2. Crear veterinario
+
+curl -X POST http://localhost:3000/api/auth/register/veterinario \
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{
+"nombre": "Carlos",
+"apellido": "López",
+"email": "carlos.lopez@email.com",
+"password": "vet123",
+"matricula": "VET-001",
+"especialidad": "Cirugía",
+"direccion": "Av. Veterinarios 123"
+}'
+
+# 3. Crear dueño
+
+curl -X POST http://localhost:3000/api/auth/register/dueno \
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{
+"nombre": "Juan",
+"apellido": "Pérez",
+"email": "juan.perez@email.com",
+"password": "dueno123",
+"direccion": "Av. Principal 123",
+"telefono": "123456789",
+"dni": "12345678"
+}'

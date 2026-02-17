@@ -1,12 +1,13 @@
-import express from "express";
+import express, { Application, Request, Response, NextFunction } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { connectDB } from "./config/database";
 import authRoutes from "./routes/auth.routes";
+import mascotaRoutes from "./routes/mascota.routes";
 
 dotenv.config();
 
-const app = express();
+const app: Application = express();
 const PORT = process.env.PORT || 3000;
 
 // Colores para consola
@@ -28,13 +29,35 @@ app.use(express.urlencoded({ extended: true }));
 
 // Rutas
 app.use("/api/auth", authRoutes);
+app.use("/api/mascotas", mascotaRoutes);
 
 // Ruta de prueba
-app.get("/api/health", (req, res) => {
+app.get("/api/health", (req: Request, res: Response) => {
   res.json({
     status: "OK",
     message: "Servidor funcionando",
     timestamp: new Date().toISOString(),
+  });
+});
+
+// Manejo de errores 404 (ruta no encontrada) - CORREGIDO
+app.use((req: Request, res: Response) => {
+  res.status(404).json({
+    message: "Ruta no encontrada",
+    path: req.originalUrl,
+  });
+});
+
+// Middleware de manejo de errores centralizado
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+  console.error("Error:", err.stack);
+
+  const status = err.status || 500;
+  const message = err.message || "Error interno del servidor";
+
+  res.status(status).json({
+    message,
+    error: process.env.NODE_ENV === "development" ? err : {},
   });
 });
 
@@ -55,12 +78,18 @@ const showUrls = () => {
     `${colors.green}${colors.bright}✅ SERVIDOR INICIADO CORRECTAMENTE${colors.reset}`,
   );
   console.log("");
-  console.log(`${colors.yellow}📌 ENDPOINTS:${colors.reset}`);
+  console.log(`${colors.yellow}📌 ENDPOINTS DISPONIBLES:${colors.reset}`);
   console.log(
     `${colors.blue}   └─ API:${colors.reset} http://localhost:${PORT}`,
   );
   console.log(
     `${colors.blue}   └─ Health:${colors.reset} http://localhost:${PORT}/api/health`,
+  );
+  console.log(
+    `${colors.blue}   └─ Auth:${colors.reset} http://localhost:${PORT}/api/auth/login`,
+  );
+  console.log(
+    `${colors.blue}   └─ Mascotas:${colors.reset} http://localhost:${PORT}/api/mascotas`,
   );
   console.log("");
   console.log(`${colors.magenta}🐘 DOCKER:${colors.reset}`);
@@ -70,15 +99,6 @@ const showUrls = () => {
   console.log(
     `${colors.blue}   └─ phpMyAdmin:${colors.reset} ${colors.bright}http://localhost:8080${colors.reset}`,
   );
-  console.log(`      └─ Usuario: ${colors.green}root${colors.reset}`);
-  console.log(`      └─ Password: ${colors.green}root123${colors.reset}`);
-  console.log(
-    `      └─ Base de datos: ${colors.green}curso_backend${colors.reset}`,
-  );
-  console.log("");
-  console.log(`${colors.yellow}📝 CREDENCIALES BACKEND:${colors.reset}`);
-  console.log(`   └─ DB User: ${colors.green}curso_user${colors.reset}`);
-  console.log(`   └─ DB Password: ${colors.green}curso123${colors.reset}`);
   console.log("");
 };
 

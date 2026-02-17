@@ -1,4 +1,4 @@
-import { pool, connectDB } from "../config/database";
+import { pool } from "../config/database";
 import { IDueno } from "../interfaces";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
 import { UsuarioModel } from "./usuario.model";
@@ -27,5 +27,27 @@ export class DuenoModel {
     );
 
     return rows[0] || null;
+  }
+
+  static async findById(id: number): Promise<any | null> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT d.*, u.nombre, u.apellido, u.email, u.direccion 
+             FROM duenos d
+             JOIN usuarios u ON d.usuario_id = u.id
+             WHERE d.id = ?`,
+      [id],
+    );
+
+    return rows[0] || null;
+  }
+
+  static async findAll(): Promise<any[]> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT d.*, u.nombre, u.apellido, u.email, u.direccion 
+             FROM duenos d
+             JOIN usuarios u ON d.usuario_id = u.id`,
+    );
+
+    return rows;
   }
 }

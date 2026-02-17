@@ -1,3 +1,13 @@
+import { Request } from "express";
+
+// Roles
+export enum Rol {
+  ADMIN = "ADMIN",
+  VETERINARIO = "VETERINARIO",
+  DUENO = "DUENO",
+}
+
+// Usuario base
 export interface IUsuario {
   id?: number;
   nombre: string;
@@ -7,22 +17,53 @@ export interface IUsuario {
   direccion?: string;
   rol_id: number;
   activo?: boolean;
+  creado_en?: Date;
+  actualizado_en?: Date;
 }
 
+// Dueño (extiende usuario)
 export interface IDueno {
   id?: number;
   usuario_id: number;
   telefono?: string;
   dni?: string;
+  usuario?: IUsuario;
 }
 
+// Veterinario (extiende usuario)
 export interface IVeterinario {
   id?: number;
   usuario_id: number;
   matricula: string;
   especialidad?: string;
+  usuario?: IUsuario;
 }
 
+// CORRECCIÓN: Mascota - permitir raza como string | null
+export interface IMascota {
+  id?: number;
+  nombre: string;
+  especie: string;
+  raza?: string | null; // CORREGIDO: acepta null
+  sexo: "MACHO" | "HEMBRA";
+  fecha_nacimiento?: Date;
+  peso?: number;
+  dueno_id: number;
+  creado_en?: Date;
+}
+
+// Historial Clínico
+export interface IHistorialClinico {
+  id?: number;
+  mascota_id: number;
+  veterinario_id: number;
+  tipo: "CONSULTA" | "VACUNA" | "CIRUGIA" | "CONTROL";
+  descripcion: string;
+  fecha: Date;
+  creado_en?: Date;
+}
+
+// Payload del JWT
 export interface IJWTPayload {
   id: number;
   email: string;
@@ -30,13 +71,7 @@ export interface IJWTPayload {
   perfilId?: number;
 }
 
-export interface ILoginResponse {
-  token: string;
-  usuario: {
-    id: number;
-    nombre: string;
-    apellido: string;
-    email: string;
-    rol: string;
-  };
+// Request con usuario (para middleware)
+export interface IRequestWithUser extends Request {
+  user?: IJWTPayload;
 }
