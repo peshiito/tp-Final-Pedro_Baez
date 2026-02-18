@@ -1,23 +1,24 @@
 import { Router } from "express";
 import { MascotaController } from "../controllers/mascota.controller";
 import { authenticate, authorize } from "../middlewares/auth.middleware";
-import { canAccessMascota } from "../middlewares/mascota.middleware";
 
 const router = Router();
 
-// Todas las rutas de mascotas requieren autenticación
+// Todas las rutas requieren autenticación
 router.use(authenticate);
 
-// Rutas para dueños
-router.post("/", MascotaController.create);
-router.get("/", MascotaController.getMyMascotas);
+// Rutas accesibles por ADMIN y VETERINARIO
+router.get("/", authorize("ADMIN", "VETERINARIO"), MascotaController.getAll);
+router.get("/:id", authorize("ADMIN", "VETERINARIO"), MascotaController.getOne);
+router.get(
+  "/dueno/:duenoId",
+  authorize("ADMIN", "VETERINARIO"),
+  MascotaController.getByDueno,
+);
+router.post("/", authorize("ADMIN", "VETERINARIO"), MascotaController.create);
+router.put("/:id", authorize("ADMIN", "VETERINARIO"), MascotaController.update);
 
-// Rutas con parámetro ID (requieren verificación de pertenencia)
-router.get("/:id", canAccessMascota, MascotaController.getOne);
-router.put("/:id", canAccessMascota, MascotaController.update);
-router.delete("/:id", canAccessMascota, MascotaController.delete);
-
-// Rutas solo para admin (para ver todas las mascotas)
-router.get("/admin/all", authorize("ADMIN"), MascotaController.getAllForAdmin);
+// Solo ADMIN puede eliminar
+router.delete("/:id", authorize("ADMIN"), MascotaController.delete);
 
 export default router;

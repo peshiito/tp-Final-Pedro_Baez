@@ -2,9 +2,11 @@
 
 ## 📋 ENDPOINTS Y CURLS DE PRUEBA
 
+---
+
 ### 🔐 AUTENTICACIÓN
 
-## Admin
+## 👑 ADMIN
 
 #### 1. Login como admin
 
@@ -16,134 +18,153 @@ TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
 echo "Token: $TOKEN"
 ```
 
-#### 2. Crear veterinario (solo como admin)
+### 2. Crear veterinario (solo admin)
 
 ```bash
-curl -X POST http://localhost:3000/api/auth/register/veterinario \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "nombre": "Carlos",
-    "apellido": "López",
-    "email": "carlos.lopez@email.com",
-    "password": "vet123",
-    "matricula": "VET-001",
-    "especialidad": "Cirugía",
-    "direccion": "Av. Veterinarios 123"
-  }'
-
+   curl -X POST http://localhost:3000/api/auth/register/veterinario \
+    -H "Content-Type: application/json" \
+    -H "Authorization: Bearer $TOKEN" \
+    -d '{
+   "nombre": "Carlos",
+   "apellido": "López",
+   "email": "carlos.lopez@email.com",
+   "password": "vet123",
+   "matricula": "VET-001",
+   "especialidad": "Cirugía",
+   "direccion": "Av. Veterinarios 123"
+   }'
 ```
 
-##### Algo para copiar y pegar y que figure como codigo en el md
+### 3. Crear dueño (solo admin)
 
 ```bash
-
-```
-
-### 3. Crear dueño
-
-```bash
-
 curl -X POST http://localhost:3000/api/auth/register/dueno \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "nombre": "Juan",
-    "apellido": "Pérez",
-    "email": "juan.perez@email.com",
-    "password": "dueno123",
-    "direccion": "Av. Principal 123",
-    "telefono": "123456789",
-    "dni": "12345678"
-  }'
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+    -d '{
+   "nombre": "Juan",
+   "apellido": "Pérez",
+   "email": "juan.perez@email.com",
+   "password": "dueno123",
+   "direccion": "Av. Principal 123",
+   "telefono": "123456789",
+   "dni": "12345678"
+   }'
 
 ```
 
-## Gestion de mascotas (Dueño)
-
-#### Login como dueño
+### 4. Ver todos los dueños (solo admin)
 
 ```bash
-DUENO_TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"email":"juan.perez@email.com","password":"dueno123"}' | grep -o '"token":"[^"]*' | grep -o '[^"]*$')
-
-echo "Token Dueño: $DUENO_TOKEN"
+curl -X GET http://localhost:3000/api/duenos \
+ -H "Authorization: Bearer $TOKEN"
+   🐕 GESTIÓN DE MASCOTAS (ADMIN Y VETERINARIO)
 
 ```
 
-#### 5. Crear mascota
+### 5. Login como veterinario
 
 ```bash
+   VET*TOKEN=$(curl -s -X POST http://localhost:3000/api/auth/login \
+ -H "Content-Type: application/json" \
+ -d '{"email":"carlos.lopez@email.com","password":"vet123"}' | grep -o '"token":"[^"]\*' | grep -o '[^"]\_$')
 
+echo "Token Veterinario: $VET_TOKEN"
+
+```
+
+### 6. Crear mascota (admin o veterinario)
+
+```bash
 curl -X POST http://localhost:3000/api/mascotas \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $DUENO_TOKEN" \
-  -d '{
-    "nombre": "Firulais",
-    "especie": "Perro",
-    "raza": "Labrador",
-    "sexo": "MACHO",
-    "fecha_nacimiento": "2020-05-15",
-    "peso": 25.5
-  }'
-
+ -H "Content-Type: application/json" \
+ -H "Authorization: Bearer $TOKEN" \
+ -d '{
+"nombre": "Rex",
+"especie": "Perro",
+"raza": "Pastor Alemán",
+"sexo": "MACHO",
+"fecha_nacimiento": "2021-08-20",
+"peso": 32.5,
+"dueno_id": 1
+}'
 ```
 
-### 5.2 Otra mascota
-
-```bash
-
-curl -X POST http://localhost:3000/api/mascotas \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $DUENO_TOKEN" \
-  -d '{
-    "nombre": "Michi",
-    "especie": "Gato",
-    "raza": "Siames",
-    "sexo": "HEMBRA",
-    "fecha_nacimiento": "2021-03-10",
-    "peso": 4.2
-  }'
-
-
-```
-
-### 6. Listar mascotas
+### 7. Listar todas las mascotas
 
 ```bash
 curl -X GET http://localhost:3000/api/mascotas \
-  -H "Authorization: Bearer $DUENO_TOKEN"
-
+ -H "Authorization: Bearer $TOKEN"
 ```
 
-### 6.2 Listar una mascota en particular
+### 8. Ver una mascota específica
 
 ```bash
 
 # Reemplazar 1 con el ID de la mascota
-curl -X GET http://localhost:3000/api/mascotas/1 \
-  -H "Authorization: Bearer $DUENO_TOKEN"
 
+curl -X GET http://localhost:3000/api/mascotas/1 \
+ -H "Authorization: Bearer $TOKEN"
 ```
 
-### 6.3 Actualizar una mascota
+### 9. Actualizar una mascota
 
 ```bash
 curl -X PUT http://localhost:3000/api/mascotas/1 \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $DUENO_TOKEN" \
+  -H "Authorization: Bearer $TOKEN" \
   -d '{
-    "peso": 26.8,
-    "raza": "Labrador Dorado"
-  }'
+    "peso": 34.8,
+    "raza": "Pastor Alemán (Adulto)"
+    }'
 ```
 
-### 6.4 Eliminar una mascota
+### 10. Ver mascotas por dueño
 
 ```bash
+    curl -X GET http://localhost:3000/api/mascotas/dueno/1 \
+     -H "Authorization: Bearer $TOKEN"
+```
 
+### 11. Eliminar una mascota (solo admin)
+
+```bash
 curl -X DELETE http://localhost:3000/api/mascotas/1 \
-  -H "Authorization: Bearer $DUENO_TOKEN"
+ -H "Authorization: Bearer $TOKEN"
+
+```
+
+📊 VERIFICACIONES EN BASE DE DATOS
+Ver todas las mascotas
+bash
+docker exec -it tp*final_backend mysql -u root -proot123 -e "USE curso_backend; SELECT * FROM mascotas;"
+Ver todos los dueños
+bash
+docker exec -it tp*final_backend mysql -u root -proot123 -e "USE curso_backend; SELECT * FROM duenos;"
+Ver usuarios
+bash
+docker exec -it tp_final_backend mysql -u root -proot123 -e "USE curso_backend; SELECT id, nombre, apellido, email, rol_id FROM usuarios;"
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
+
+```
 
 ```

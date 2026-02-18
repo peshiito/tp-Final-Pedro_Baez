@@ -39,12 +39,12 @@ export interface IVeterinario {
   usuario?: IUsuario;
 }
 
-// CORRECCIÓN: Mascota - permitir raza como string | null
+// Mascota
 export interface IMascota {
   id?: number;
   nombre: string;
   especie: string;
-  raza?: string | null; // CORREGIDO: acepta null
+  raza?: string | null;
   sexo: "MACHO" | "HEMBRA";
   fecha_nacimiento?: Date;
   peso?: number;
