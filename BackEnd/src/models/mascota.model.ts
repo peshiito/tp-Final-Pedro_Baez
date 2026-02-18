@@ -14,7 +14,7 @@ export class MascotaModel {
       [
         nombre || "",
         especie || "",
-        raza !== undefined ? raza : null, // CORRECCIÓN: manejar undefined
+        raza !== undefined ? raza : null,
         sexo || "MACHO",
         fecha_nacimiento || null,
         peso || null,
@@ -31,7 +31,9 @@ export class MascotaModel {
       `SELECT m.*, 
                     u.nombre as dueno_nombre, 
                     u.apellido as dueno_apellido,
-                    u.email as dueno_email
+                    u.email as dueno_email,
+                    d.telefono as dueno_telefono,
+                    d.dni as dueno_dni
              FROM mascotas m
              JOIN duenos d ON m.dueno_id = d.id
              JOIN usuarios u ON d.usuario_id = u.id
@@ -43,33 +45,15 @@ export class MascotaModel {
     return rows;
   }
 
-  // Obtener una mascota por ID (verificando dueño)
-  static async findByIdAndDueno(
-    id: number,
-    duenoId: number,
-  ): Promise<any | null> {
-    const [rows] = await pool.execute<RowDataPacket[]>(
-      `SELECT m.*, 
-                    u.nombre as dueno_nombre, 
-                    u.apellido as dueno_apellido,
-                    u.email as dueno_email
-             FROM mascotas m
-             JOIN duenos d ON m.dueno_id = d.id
-             JOIN usuarios u ON d.usuario_id = u.id
-             WHERE m.id = ? AND m.dueno_id = ?`,
-      [id, duenoId],
-    );
-
-    return rows[0] || null;
-  }
-
-  // Obtener una mascota por ID (sin verificar dueño)
+  // Obtener una mascota por ID (con datos del dueño)
   static async findById(id: number): Promise<any | null> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT m.*, 
                     u.nombre as dueno_nombre, 
                     u.apellido as dueno_apellido,
-                    u.email as dueno_email
+                    u.email as dueno_email,
+                    d.telefono as dueno_telefono,
+                    d.dni as dueno_dni
              FROM mascotas m
              JOIN duenos d ON m.dueno_id = d.id
              JOIN usuarios u ON d.usuario_id = u.id
@@ -80,10 +64,9 @@ export class MascotaModel {
     return rows[0] || null;
   }
 
-  // Actualizar mascota
-  static async update(
+  // Actualizar mascota (sin verificar dueño - para admin/vet)
+  static async updateAdmin(
     id: number,
-    duenoId: number,
     data: Partial<IMascota>,
   ): Promise<boolean> {
     const fields = [];
@@ -113,48 +96,41 @@ export class MascotaModel {
       fields.push("peso = ?");
       values.push(data.peso);
     }
+    if (data.dueno_id !== undefined) {
+      fields.push("dueno_id = ?");
+      values.push(data.dueno_id);
+    }
 
     if (fields.length === 0) return false;
 
-    values.push(id, duenoId);
+    values.push(id);
     const [result] = await pool.execute<ResultSetHeader>(
-      `UPDATE mascotas SET ${fields.join(", ")} WHERE id = ? AND dueno_id = ?`,
+      `UPDATE mascotas SET ${fields.join(", ")} WHERE id = ?`,
       values,
     );
 
     return result.affectedRows > 0;
   }
 
-  // Eliminar mascota
-  static async delete(id: number, duenoId: number): Promise<boolean> {
+  // Eliminar mascota (sin verificar dueño - solo admin)
+  static async deleteAdmin(id: number): Promise<boolean> {
     const [result] = await pool.execute<ResultSetHeader>(
-      "DELETE FROM mascotas WHERE id = ? AND dueno_id = ?",
-      [id, duenoId],
+      "DELETE FROM mascotas WHERE id = ?",
+      [id],
     );
 
     return result.affectedRows > 0;
   }
 
-  // Verificar si una mascota pertenece a un dueño
-  static async belongsToDueno(
-    mascotaId: number,
-    duenoId: number,
-  ): Promise<boolean> {
-    const [rows] = await pool.execute<RowDataPacket[]>(
-      "SELECT id FROM mascotas WHERE id = ? AND dueno_id = ?",
-      [mascotaId, duenoId],
-    );
-
-    return rows.length > 0;
-  }
-
-  // Obtener todas las mascotas (para admin)
+  // Obtener todas las mascotas (para admin y veterinarios)
   static async findAll(): Promise<any[]> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT m.*, 
                     u.nombre as dueno_nombre, 
                     u.apellido as dueno_apellido,
-                    u.email as dueno_email
+                    u.email as dueno_email,
+                    d.telefono as dueno_telefono,
+                    d.dni as dueno_dni
              FROM mascotas m
              JOIN duenos d ON m.dueno_id = d.id
              JOIN usuarios u ON d.usuario_id = u.id
@@ -162,5 +138,15 @@ export class MascotaModel {
     );
 
     return rows;
+  }
+
+  // Verificar si una mascota existe
+  static async exists(id: number): Promise<boolean> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      "SELECT id FROM mascotas WHERE id = ?",
+      [id],
+    );
+
+    return rows.length > 0;
   }
 }

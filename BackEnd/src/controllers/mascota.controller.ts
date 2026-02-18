@@ -2,59 +2,58 @@ import { Request, Response } from "express";
 import { MascotaModel } from "../models/mascota.model";
 import { DuenoModel } from "../models/dueno.model";
 import { CreateMascotaDTO, UpdateMascotaDTO } from "../dtos/mascota.dto";
-import { IRequestWithUser, IMascota } from "../interfaces";
+import { IRequestWithUser } from "../interfaces";
 
 export class MascotaController {
-  // Crear una nueva mascota (solo dueño autenticado)
+  // Crear mascota (Admin y Veterinario)
   static async create(req: IRequestWithUser, res: Response) {
     try {
       const data: CreateMascotaDTO = req.body;
-      const userId = req.user?.id;
+      const userRole = req.user?.rol;
 
-      if (!userId) {
-        return res.status(401).json({ message: "No autenticado" });
+      // Solo admin y veterinario pueden crear mascotas
+      if (userRole !== "ADMIN" && userRole !== "VETERINARIO") {
+        return res
+          .status(403)
+          .json({ message: "No tienes permiso para crear mascotas" });
       }
 
-      // Obtener el dueño asociado al usuario
-      const dueno = await DuenoModel.findByUsuarioId(userId);
+      // Validar que el dueño existe
+      const dueno = await DuenoModel.findById(data.dueno_id);
       if (!dueno) {
-        return res.status(403).json({ message: "No eres un dueño registrado" });
+        return res
+          .status(404)
+          .json({ message: "El dueño especificado no existe" });
       }
 
       // Validar campos requeridos
-      if (!data.nombre || !data.especie || !data.sexo) {
+      if (!data.nombre || !data.especie || !data.sexo || !data.dueno_id) {
         return res.status(400).json({
-          message: "Nombre, especie y sexo son requeridos",
+          message: "Nombre, especie, sexo y dueño_id son requeridos",
         });
       }
 
-      // Validar que sexo sea MACHO o HEMBRA
+      // Validar sexo
       if (data.sexo !== "MACHO" && data.sexo !== "HEMBRA") {
-        return res.status(400).json({
-          message: "Sexo debe ser MACHO o HEMBRA",
-        });
+        return res
+          .status(400)
+          .json({ message: "Sexo debe ser MACHO o HEMBRA" });
       }
 
-      // Manejar raza correctamente
-      const razaValue = data.raza !== undefined ? data.raza : null;
-
-      // Preparar datos para el modelo
-      const mascotaData: Partial<IMascota> = {
+      // Crear la mascota
+      const mascotaId = await MascotaModel.create({
         nombre: data.nombre,
         especie: data.especie,
-        raza: razaValue,
+        raza: data.raza || null,
         sexo: data.sexo,
         fecha_nacimiento: data.fecha_nacimiento
           ? new Date(data.fecha_nacimiento)
           : undefined,
         peso: data.peso,
-        dueno_id: dueno.id,
-      };
+        dueno_id: data.dueno_id,
+      });
 
-      // Crear la mascota
-      const mascotaId = await MascotaModel.create(mascotaData);
-
-      // Obtener la mascota creada para devolverla
+      // Obtener la mascota creada
       const nuevaMascota = await MascotaModel.findById(mascotaId);
 
       res.status(201).json({
@@ -67,24 +66,22 @@ export class MascotaController {
     }
   }
 
-  // Obtener todas las mascotas del dueño autenticado
-  static async getMyMascotas(req: IRequestWithUser, res: Response) {
+  // Obtener TODAS las mascotas (Admin y Veterinario)
+  static async getAll(req: IRequestWithUser, res: Response) {
     try {
-      const userId = req.user?.id;
+      const userRole = req.user?.rol;
 
-      if (!userId) {
-        return res.status(401).json({ message: "No autenticado" });
+      if (userRole !== "ADMIN" && userRole !== "VETERINARIO") {
+        return res
+          .status(403)
+          .json({ message: "No tienes permiso para ver mascotas" });
       }
 
-      const dueno = await DuenoModel.findByUsuarioId(userId);
-      if (!dueno) {
-        return res.status(403).json({ message: "No eres un dueño registrado" });
-      }
-
-      const mascotas = await MascotaModel.findByDuenoId(dueno.id);
+      const mascotas = await MascotaModel.findAll();
 
       res.json({
         message: "Mascotas obtenidas exitosamente",
+        total: mascotas.length,
         mascotas,
       });
     } catch (error) {
@@ -93,34 +90,27 @@ export class MascotaController {
     }
   }
 
-  // Obtener una mascota específica del dueño
+  // Obtener una mascota por ID
   static async getOne(req: IRequestWithUser, res: Response) {
     try {
-      // Asegurar que params.id es string
       const idParam = req.params.id;
       if (Array.isArray(idParam)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
       const mascotaId = parseInt(idParam);
-
-      // Verificar que el ID es válido
       if (isNaN(mascotaId)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
-      const userId = req.user?.id;
-
-      if (!userId) {
-        return res.status(401).json({ message: "No autenticado" });
+      const userRole = req.user?.rol;
+      if (userRole !== "ADMIN" && userRole !== "VETERINARIO") {
+        return res
+          .status(403)
+          .json({ message: "No tienes permiso para ver mascotas" });
       }
 
-      const dueno = await DuenoModel.findByUsuarioId(userId);
-      if (!dueno) {
-        return res.status(403).json({ message: "No eres un dueño registrado" });
-      }
-
-      const mascota = await MascotaModel.findByIdAndDueno(mascotaId, dueno.id);
+      const mascota = await MascotaModel.findById(mascotaId);
       if (!mascota) {
         return res.status(404).json({ message: "Mascota no encontrada" });
       }
@@ -135,74 +125,60 @@ export class MascotaController {
     }
   }
 
-  // Actualizar una mascota
+  // Actualizar mascota
   static async update(req: IRequestWithUser, res: Response) {
     try {
-      // Asegurar que params.id es string
       const idParam = req.params.id;
       if (Array.isArray(idParam)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
       const mascotaId = parseInt(idParam);
-
-      // Verificar que el ID es válido
       if (isNaN(mascotaId)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
+      const userRole = req.user?.rol;
+      if (userRole !== "ADMIN" && userRole !== "VETERINARIO") {
+        return res
+          .status(403)
+          .json({ message: "No tienes permiso para actualizar mascotas" });
+      }
+
       const data: UpdateMascotaDTO = req.body;
-      const userId = req.user?.id;
 
-      if (!userId) {
-        return res.status(401).json({ message: "No autenticado" });
-      }
-
-      const dueno = await DuenoModel.findByUsuarioId(userId);
-      if (!dueno) {
-        return res.status(403).json({ message: "No eres un dueño registrado" });
-      }
-
-      // Verificar que la mascota existe y pertenece al dueño
-      const mascota = await MascotaModel.findByIdAndDueno(mascotaId, dueno.id);
+      // Verificar que la mascota existe
+      const mascota = await MascotaModel.findById(mascotaId);
       if (!mascota) {
         return res.status(404).json({ message: "Mascota no encontrada" });
       }
 
-      // Validar sexo si viene en la actualización
-      if (data.sexo && data.sexo !== "MACHO" && data.sexo !== "HEMBRA") {
-        return res.status(400).json({
-          message: "Sexo debe ser MACHO o HEMBRA",
-        });
+      // Si se quiere cambiar de dueño, verificar que el nuevo dueño existe
+      if (data.dueno_id) {
+        const dueno = await DuenoModel.findById(data.dueno_id);
+        if (!dueno) {
+          return res
+            .status(404)
+            .json({ message: "El dueño especificado no existe" });
+        }
       }
 
-      // CORRECCIÓN: Convertir fecha_nacimiento de string a Date si existe
-      const updateData: Partial<IMascota> = {
-        nombre: data.nombre,
-        especie: data.especie,
-        raza: data.raza,
-        sexo: data.sexo,
-        peso: data.peso,
-        fecha_nacimiento: data.fecha_nacimiento
-          ? new Date(data.fecha_nacimiento)
-          : undefined,
-      };
+      // Validar sexo si viene
+      if (data.sexo && data.sexo !== "MACHO" && data.sexo !== "HEMBRA") {
+        return res
+          .status(400)
+          .json({ message: "Sexo debe ser MACHO o HEMBRA" });
+      }
 
-      // Eliminar propiedades undefined para no enviarlas al modelo
-      Object.keys(updateData).forEach((key) => {
-        if (updateData[key as keyof typeof updateData] === undefined) {
-          delete updateData[key as keyof typeof updateData];
-        }
-      });
+      // Preparar datos para actualizar
+      const updateData: any = { ...data };
+      if (data.fecha_nacimiento) {
+        updateData.fecha_nacimiento = new Date(data.fecha_nacimiento);
+      }
 
-      const updated = await MascotaModel.update(
-        mascotaId,
-        dueno.id,
-        updateData,
-      );
+      const updated = await MascotaModel.updateAdmin(mascotaId, updateData);
 
       if (updated) {
-        // Obtener la mascota actualizada
         const mascotaActualizada = await MascotaModel.findById(mascotaId);
         res.json({
           message: "Mascota actualizada exitosamente",
@@ -217,34 +193,27 @@ export class MascotaController {
     }
   }
 
-  // Eliminar una mascota
+  // Eliminar mascota (solo admin)
   static async delete(req: IRequestWithUser, res: Response) {
     try {
-      // Asegurar que params.id es string
       const idParam = req.params.id;
       if (Array.isArray(idParam)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
       const mascotaId = parseInt(idParam);
-
-      // Verificar que el ID es válido
       if (isNaN(mascotaId)) {
         return res.status(400).json({ message: "ID de mascota inválido" });
       }
 
-      const userId = req.user?.id;
-
-      if (!userId) {
-        return res.status(401).json({ message: "No autenticado" });
+      const userRole = req.user?.rol;
+      if (userRole !== "ADMIN") {
+        return res
+          .status(403)
+          .json({ message: "Solo admin puede eliminar mascotas" });
       }
 
-      const dueno = await DuenoModel.findByUsuarioId(userId);
-      if (!dueno) {
-        return res.status(403).json({ message: "No eres un dueño registrado" });
-      }
-
-      const deleted = await MascotaModel.delete(mascotaId, dueno.id);
+      const deleted = await MascotaModel.deleteAdmin(mascotaId);
 
       if (deleted) {
         res.json({ message: "Mascota eliminada exitosamente" });
@@ -257,12 +226,31 @@ export class MascotaController {
     }
   }
 
-  // Para admin: obtener todas las mascotas
-  static async getAllForAdmin(req: IRequestWithUser, res: Response) {
+  // Buscar mascotas por dueño
+  // Buscar mascotas por dueño
+  static async getByDueno(req: IRequestWithUser, res: Response) {
     try {
-      const mascotas = await MascotaModel.findAll();
+      // CORRECCIÓN: Asegurar que params.duenoId es string
+      const duenoIdParam = req.params.duenoId;
+      if (Array.isArray(duenoIdParam)) {
+        return res.status(400).json({ message: "ID de dueño inválido" });
+      }
+
+      const duenoId = parseInt(duenoIdParam);
+      if (isNaN(duenoId)) {
+        return res.status(400).json({ message: "ID de dueño inválido" });
+      }
+
+      const userRole = req.user?.rol;
+      if (userRole !== "ADMIN" && userRole !== "VETERINARIO") {
+        return res.status(403).json({ message: "No tienes permiso" });
+      }
+
+      const mascotas = await MascotaModel.findByDuenoId(duenoId);
+
       res.json({
-        message: "Todas las mascotas",
+        message: "Mascotas del dueño obtenidas",
+        total: mascotas.length,
         mascotas,
       });
     } catch (error) {
