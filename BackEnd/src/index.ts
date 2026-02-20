@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/database";
 import authRoutes from "./routes/auth.routes";
 import mascotaRoutes from "./routes/mascota.routes";
+import historialRoutes from "./routes/historial.routes";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/mascotas", mascotaRoutes);
+app.use("/api/historial", historialRoutes);
 
 // Ruta de prueba
 app.get("/api/health", (req: Request, res: Response) => {

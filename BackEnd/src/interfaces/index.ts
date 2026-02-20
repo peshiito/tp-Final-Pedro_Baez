@@ -53,13 +53,16 @@ export interface IMascota {
 }
 
 // Historial Clínico
+// Historial Clínico
 export interface IHistorialClinico {
   id?: number;
   mascota_id: number;
   veterinario_id: number;
-  tipo: "CONSULTA" | "VACUNA" | "CIRUGIA" | "CONTROL";
-  descripcion: string;
   fecha: Date;
+  tipo: "CONSULTA" | "VACUNA" | "CIRUGIA" | "CONTROL";
+  diagnostico: string;
+  tratamiento?: string;
+  observaciones?: string;
   creado_en?: Date;
 }
 
