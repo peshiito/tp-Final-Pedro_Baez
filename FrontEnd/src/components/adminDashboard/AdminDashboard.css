@@ -1,0 +1,126 @@
+.admin-dashboard {
+  min-height: 100vh;
+  background: var(--background);
+}
+
+.dashboard-header {
+  background: var(--white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-content h1 {
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.logout-button {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: var(--primary);
+  color: white;
+}
+
+.dashboard-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.welcome-card {
+  background: var(--white);
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  margin-bottom: 32px;
+}
+
+.welcome-icon {
+  font-size: 64px;
+  background: var(--background);
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 60px;
+}
+
+.welcome-text h2 {
+  color: var(--text);
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.welcome-text p {
+  color: var(--text);
+  opacity: 0.7;
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.role-badge {
+  background: var(--primary);
+  color: white;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: inline-block;
+}
+
+.info-message {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: center;
+  border: 2px dashed var(--secondary);
+}
+
+.info-message p {
+  color: var(--text);
+  opacity: 0.8;
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .welcome-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 32px 24px;
+  }
+
+  .welcome-text h2 {
+    font-size: 24px;
+  }
+
+  .header-content h1 {
+    font-size: 20px;
+  }
+}
