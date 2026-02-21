@@ -1,0 +1,159 @@
+.mascotas-page {
+  padding: 20px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  color: var(--text);
+  font-size: 28px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: #ff5a33;
+  transform: translateY(-2px);
+}
+
+.search-section {
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid #e1e1e8;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(255, 114, 76, 0.1);
+}
+
+.loading-message {
+  text-align: center;
+  padding: 40px;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+.mascotas-table-container {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow-x: auto;
+}
+
+.mascotas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mascotas-table th {
+  text-align: left;
+  padding: 12px;
+  background: var(--background);
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.mascotas-table td {
+  padding: 12px;
+  border-bottom: 1px solid var(--background);
+  color: var(--text);
+}
+
+.mascotas-table tr:hover {
+  background: var(--background);
+}
+
+.action-btn {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-right: 8px;
+  border: 1px solid transparent;
+}
+
+.view-btn {
+  background: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+}
+
+.view-btn:hover {
+  background: #ff5a33;
+}
+
+.edit-btn {
+  background: transparent;
+  border: 1px solid var(--secondary);
+  color: var(--secondary);
+}
+
+.edit-btn:hover {
+  background: var(--secondary);
+  color: white;
+}
+
+.history-btn {
+  background: transparent;
+  border: 1px solid var(--text);
+  color: var(--text);
+}
+
+.history-btn:hover {
+  background: var(--text);
+  color: white;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  color: var(--text);
+  opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .mascotas-table th,
+  .mascotas-table td {
+    font-size: 13px;
+    padding: 8px;
+  }
+  
+  .action-btn {
+    padding: 4px 8px;
+    font-size: 11px;
+    margin-right: 4px;
+  }
+}

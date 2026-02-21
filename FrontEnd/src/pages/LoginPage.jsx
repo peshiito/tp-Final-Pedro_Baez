@@ -1,13 +1,21 @@
-import React, { useState } from 'react';
-import { useAuth } from '../../hooks/useAuth';
-import './Login.css';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
+import './LoginPage.css';
 
-const Login = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -17,14 +25,14 @@ const Login = () => {
     try {
       await login(email, password);
     } catch (err) {
-      setError(err.message || 'Error al iniciar sesion');
+      setError(err.message || 'Error al iniciar sesión');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="login-page">
       <div className="login-card">
         <div className="login-header">
           <h1>🐾 Patitas Felices</h1>
@@ -61,16 +69,16 @@ const Login = () => {
           </div>
 
           <button type="submit" className="login-button" disabled={isLoading}>
-            {isLoading ? 'Iniciando sesion...' : 'Iniciar sesion'}
+            {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
           </button>
         </form>
 
         <div className="login-footer">
-          <p>Sistema de gestion veterinaria</p>
+          <p>Sistema de gestión veterinaria</p>
         </div>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

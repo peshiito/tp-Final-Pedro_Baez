@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/database";
 import authRoutes from "./routes/auth.routes";
 import mascotaRoutes from "./routes/mascota.routes";
-import historialRoutes from "./routes/historial.routes";
+import duenoRoutes from "./routes/dueno.routes";
+import usuarioRoutes from "./routes/usuarios.routes";
 
 dotenv.config();
 
@@ -31,7 +32,8 @@ app.use(express.urlencoded({ extended: true }));
 // Rutas
 app.use("/api/auth", authRoutes);
 app.use("/api/mascotas", mascotaRoutes);
-app.use("/api/historial", historialRoutes);
+app.use("/api/duenos", duenoRoutes);
+app.use("/api/usuarios", usuarioRoutes);
 
 // Ruta de prueba
 app.get("/api/health", (req: Request, res: Response) => {
@@ -42,7 +44,7 @@ app.get("/api/health", (req: Request, res: Response) => {
   });
 });
 
-// Manejo de errores 404 (ruta no encontrada) - CORREGIDO
+// Manejo de errores 404
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     message: "Ruta no encontrada",
@@ -50,7 +52,7 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-// Middleware de manejo de errores centralizado
+// Middleware de manejo de errores
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
   console.error("Error:", err.stack);
 
@@ -93,10 +95,16 @@ const showUrls = () => {
   console.log(
     `${colors.blue}   └─ Mascotas:${colors.reset} http://localhost:${PORT}/api/mascotas`,
   );
+  console.log(
+    `${colors.blue}   └─ Dueños:${colors.reset} http://localhost:${PORT}/api/duenos`,
+  );
+  console.log(
+    `${colors.blue}   └─ Usuarios:${colors.reset} http://localhost:${PORT}/api/usuarios`,
+  );
   console.log("");
   console.log(`${colors.magenta}🐘 DOCKER:${colors.reset}`);
   console.log(
-    `${colors.blue}   └─ MySQL:${colors.reset} localhost:3306 (curso_backend)`,
+    `${colors.blue}   └─ MySQL:${colors.reset} localhost:3306 (veterinaria_db)`,
   );
   console.log(
     `${colors.blue}   └─ phpMyAdmin:${colors.reset} ${colors.bright}http://localhost:8080${colors.reset}`,
