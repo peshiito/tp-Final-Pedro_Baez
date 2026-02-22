@@ -1,13 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 :root {
-  --primary: #ff724c;
-  --secondary: #fdbf50;
-  --background: #f4f4f8;
-  --text: #2a2c41;
+  --primary: #8b5cf6;     /* Púrpura más vibrante */
+  --primary-dark: #7c3aed;
+  --primary-light: #a78bfa;
+  --secondary: #10b981;    /* Verde esmeralda */
+  --secondary-dark: #059669;
+  --background: #0f172a;    /* Fondo oscuro profundo */
+  --surface: #1e293b;      /* Superficie */
+  --surface-light: #334155;
+  --text: #f8fafc;         /* Texto claro */
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --white: #ffffff;
-  --error: #dc2626;
-  --success: #10b981;
+  --error: #ef4444;
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --border: #334155;
+  --card-bg: #1e293b;
+  --hover-bg: #2d3a4f;
 }
 
 * {
@@ -20,9 +31,35 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--background);
   color: var(--text);
-  line-height: 1.5;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 button {
   font-family: inherit;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
 }

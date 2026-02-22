@@ -6,7 +6,9 @@ import LoginPage from './pages/LoginPage';
 import AdminDashboard from './pages/AdminDashboard';
 import VeterinarioDashboard from './pages/VeterinarioDashboard';
 import DuenosPage from './pages/DuenosPage';
+import NuevoDuenoPage from './pages/NuevoDuenoPage';
 import MascotasPage from './pages/MascotasPage';
+import NuevaMascotaPage from './pages/NuevaMascotaPage';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -32,15 +34,29 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
+      {/* Rutas de dueños */}
       <Route path="/duenos" element={
         <ProtectedRoute>
           {isAdmin ? <DuenosPage /> : <Navigate to="/" replace />}
         </ProtectedRoute>
       } />
       
+      <Route path="/duenos/nuevo" element={
+        <ProtectedRoute>
+          {isAdmin ? <NuevoDuenoPage /> : <Navigate to="/" replace />}
+        </ProtectedRoute>
+      } />
+      
+      {/* Rutas de mascotas */}
       <Route path="/mascotas" element={
         <ProtectedRoute>
           <MascotasPage />
+        </ProtectedRoute>
+      } />
+      
+      <Route path="/mascotas/nueva" element={
+        <ProtectedRoute>
+          <NuevaMascotaPage />
         </ProtectedRoute>
       } />
       

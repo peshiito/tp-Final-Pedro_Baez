@@ -1,68 +1,69 @@
 .mascotas-page {
-  padding: 20px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  color: var(--text);
 }
 
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 30px;
 }
 
 .page-header h1 {
   color: var(--text);
-  font-size: 28px;
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  background: linear-gradient(135deg, var(--primary-light), var(--secondary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
-.btn-primary {
-  background: var(--primary);
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #ff5a33;
-  transform: translateY(-2px);
-}
-
+/* Barra de búsqueda */
 .search-section {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .search-input {
   width: 100%;
-  max-width: 400px;
-  padding: 12px 16px;
-  border: 2px solid #e1e1e8;
-  border-radius: 8px;
-  font-size: 14px;
+  max-width: 500px;
+  padding: 16px 20px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  font-size: 16px;
+  background: var(--surface);
+  color: var(--text);
   transition: all 0.2s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
 }
 
 .search-input:focus {
   outline: none;
   border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(255, 114, 76, 0.1);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
 }
 
 .loading-message {
   text-align: center;
-  padding: 40px;
-  color: var(--text);
-  opacity: 0.7;
+  padding: 60px;
+  background: var(--surface);
+  border-radius: 20px;
+  color: var(--text-secondary);
+  font-size: 16px;
+  border: 1px solid var(--border);
 }
 
+/* Tabla de mascotas */
 .mascotas-table-container {
-  background: var(--white);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   overflow-x: auto;
 }
 
@@ -73,87 +74,62 @@
 
 .mascotas-table th {
   text-align: left;
-  padding: 12px;
-  background: var(--background);
+  padding: 16px;
+  background: var(--surface-light);
   color: var(--text);
   font-weight: 600;
   font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--border);
 }
 
 .mascotas-table td {
-  padding: 12px;
-  border-bottom: 1px solid var(--background);
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
   color: var(--text);
 }
 
 .mascotas-table tr:hover {
-  background: var(--background);
+  background: var(--surface-light);
 }
 
-.action-btn {
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  cursor: pointer;
-  margin-right: 8px;
-  border: 1px solid transparent;
-}
-
-.view-btn {
-  background: var(--primary);
-  color: white;
-  border: 1px solid var(--primary);
-}
-
-.view-btn:hover {
-  background: #ff5a33;
-}
-
-.edit-btn {
-  background: transparent;
-  border: 1px solid var(--secondary);
-  color: var(--secondary);
-}
-
-.edit-btn:hover {
-  background: var(--secondary);
-  color: white;
-}
-
-.history-btn {
-  background: transparent;
-  border: 1px solid var(--text);
-  color: var(--text);
-}
-
-.history-btn:hover {
-  background: var(--text);
-  color: white;
+.mascotas-table tr:last-child td {
+  border-bottom: none;
 }
 
 .no-results {
   text-align: center;
-  padding: 40px;
-  color: var(--text);
-  opacity: 0.7;
+  padding: 60px !important;
+  color: var(--text-secondary);
+  font-size: 16px;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-  .page-header {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
+  .mascotas-page {
+    padding: 16px;
   }
-  
+
   .mascotas-table th,
   .mascotas-table td {
-    font-size: 13px;
-    padding: 8px;
+    padding: 12px;
+    font-size: 14px;
   }
-  
-  .action-btn {
-    padding: 4px 8px;
-    font-size: 11px;
-    margin-right: 4px;
+
+  .search-input {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .mascotas-table-container {
+    padding: 16px;
+  }
+
+  .mascotas-table th,
+  .mascotas-table td {
+    padding: 8px;
+    font-size: 13px;
   }
 }
