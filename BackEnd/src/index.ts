@@ -6,6 +6,8 @@ import authRoutes from "./routes/auth.routes";
 import mascotaRoutes from "./routes/mascota.routes";
 import duenoRoutes from "./routes/dueno.routes";
 import usuarioRoutes from "./routes/usuarios.routes";
+import veterinarioRoutes from "./routes/veterinario.routes"; // 👈 AGREGADO
+import historialRoutes from "./routes/historial.routes"; // 👈 AGREGADO
 
 dotenv.config();
 
@@ -34,6 +36,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/mascotas", mascotaRoutes);
 app.use("/api/duenos", duenoRoutes);
 app.use("/api/usuarios", usuarioRoutes);
+app.use("/api/veterinarios", veterinarioRoutes); // 👈 AGREGADO
+app.use("/api/historial", historialRoutes); // 👈 AGREGADO
 
 // Ruta de prueba
 app.get("/api/health", (req: Request, res: Response) => {
@@ -100,6 +104,12 @@ const showUrls = () => {
   );
   console.log(
     `${colors.blue}   └─ Usuarios:${colors.reset} http://localhost:${PORT}/api/usuarios`,
+  );
+  console.log(
+    `${colors.blue}   └─ Veterinarios:${colors.reset} http://localhost:${PORT}/api/veterinarios`, // 👈 AGREGADO
+  );
+  console.log(
+    `${colors.blue}   └─ Historial:${colors.reset} http://localhost:${PORT}/api/historial`, // 👈 AGREGADO
   );
   console.log("");
   console.log(`${colors.magenta}🐘 DOCKER:${colors.reset}`);

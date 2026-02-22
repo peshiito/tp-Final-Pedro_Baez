@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import MainLayout from "../layouts/MainLayout";
 import api from "../services/api";
 import "./DuenosPage.css";
 
 const DuenosPage = () => {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [dueno, setDueno] = useState(null);
   const [mascotas, setMascotas] = useState([]);
@@ -26,11 +28,11 @@ const DuenosPage = () => {
     setBusquedaRealizada(true);
 
     try {
-      // Buscar usuario por email
-      const usuariosResponse = await api.get(`/usuarios?email=${email}`);
+      // Primero buscamos el usuario por email
+      const usuariosResponse = await api.get("/usuarios");
       const usuarios = usuariosResponse.data || [];
 
-      // Filtrar por email exacto y rol DUENO (rol_id = 3)
+      // Buscamos el usuario con ese email y rol DUENO (rol_id = 3)
       const usuarioEncontrado = usuarios.find(
         (u) => u.email.toLowerCase() === email.toLowerCase() && u.rol_id === 3,
       );
@@ -41,22 +43,22 @@ const DuenosPage = () => {
         return;
       }
 
-      // Buscar el perfil de dueño asociado
-      const duenosResponse = await api.get(
-        `/duenos/usuario/${usuarioEncontrado.id}`,
+      // Buscamos el dueño asociado a ese usuario
+      const duenosResponse = await api.get("/duenos");
+      const duenos = duenosResponse.data || [];
+      const duenoEncontrado = duenos.find(
+        (d) => d.usuario_id === usuarioEncontrado.id,
       );
 
-      if (!duenosResponse.data) {
+      if (!duenoEncontrado) {
         setError("El usuario existe pero no tiene perfil de dueño");
         setLoading(false);
         return;
       }
 
-      const duenoData = duenosResponse.data;
-
-      // Combinar datos
+      // Combinamos datos del usuario y del dueño
       const duenoCompleto = {
-        ...duenoData,
+        ...duenoEncontrado,
         nombre: usuarioEncontrado.nombre,
         apellido: usuarioEncontrado.apellido,
         email: usuarioEncontrado.email,
@@ -65,8 +67,8 @@ const DuenosPage = () => {
 
       setDueno(duenoCompleto);
 
-      // Buscar mascotas del dueño
-      const mascotasResponse = await api.get(`/mascotas/dueno/${duenoData.id}`);
+      // Buscamos las mascotas de ese dueño
+      const mascotasResponse = await api.get(`/mascotas/dueno/${duenoEncontrado.id}`);
       setMascotas(mascotasResponse.data.mascotas || []);
     } catch (error) {
       console.error("Error en búsqueda:", error);
@@ -74,6 +76,10 @@ const DuenosPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const verDetalleMascota = (mascotaId) => {
+    navigate(`/mascotas/${mascotaId}`);
   };
 
   return (
@@ -146,7 +152,12 @@ const DuenosPage = () => {
               ) : (
                 <div className="mascotas-grid">
                   {mascotas.map((mascota) => (
-                    <div key={mascota.id} className="mascota-card">
+                    <div
+                      key={mascota.id}
+                      className="mascota-card"
+                      onClick={() => verDetalleMascota(mascota.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <h3>{mascota.nombre}</h3>
                       <div className="mascota-details">
                         <p>
@@ -173,6 +184,9 @@ const DuenosPage = () => {
                               ).toLocaleDateString()
                             : "No especificada"}
                         </p>
+                      </div>
+                      <div className="mascota-actions">
+                        <button className="btn-secondary">Ver Historial</button>
                       </div>
                     </div>
                   ))}
