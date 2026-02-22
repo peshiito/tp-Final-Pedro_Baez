@@ -9,6 +9,7 @@ import DuenosPage from './pages/DuenosPage';
 import NuevoDuenoPage from './pages/NuevoDuenoPage';
 import MascotasPage from './pages/MascotasPage';
 import NuevaMascotaPage from './pages/NuevaMascotaPage';
+import NuevoVeterinarioPage from './pages/NuevoVeterinarioPage';
 import './App.css';
 
 const ProtectedRoute = ({ children }) => {
@@ -57,6 +58,13 @@ const AppRoutes = () => {
       <Route path="/mascotas/nueva" element={
         <ProtectedRoute>
           <NuevaMascotaPage />
+        </ProtectedRoute>
+      } />
+      
+      {/* Rutas de veterinarios */}
+      <Route path="/veterinarios/nuevo" element={
+        <ProtectedRoute>
+          {isAdmin ? <NuevoVeterinarioPage /> : <Navigate to="/" replace />}
         </ProtectedRoute>
       } />
       
