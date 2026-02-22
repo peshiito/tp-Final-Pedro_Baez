@@ -9,6 +9,7 @@ import DuenosPage from './pages/DuenosPage';
 import NuevoDuenoPage from './pages/NuevoDuenoPage';
 import MascotasPage from './pages/MascotasPage';
 import NuevaMascotaPage from './pages/NuevaMascotaPage';
+import MascotaDetallePage from './pages/MascotaDetallePage';
 import NuevoVeterinarioPage from './pages/NuevoVeterinarioPage';
 import './App.css';
 
@@ -16,7 +17,12 @@ const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   
   if (loading) {
-    return <div className="loading-screen">Cargando...</div>;
+    return (
+      <div className="loading-screen">
+        <div className="loading-spinner"></div>
+        <p>Cargando...</p>
+      </div>
+    );
   }
   
   return isAuthenticated ? children : <Navigate to="/login" replace />;
@@ -35,7 +41,7 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
-      {/* Rutas de dueños */}
+      {/* Rutas de dueños - Solo admin */}
       <Route path="/duenos" element={
         <ProtectedRoute>
           {isAdmin ? <DuenosPage /> : <Navigate to="/" replace />}
@@ -48,7 +54,7 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
-      {/* Rutas de mascotas */}
+      {/* Rutas de mascotas - Admin y veterinario */}
       <Route path="/mascotas" element={
         <ProtectedRoute>
           <MascotasPage />
@@ -61,7 +67,13 @@ const AppRoutes = () => {
         </ProtectedRoute>
       } />
       
-      {/* Rutas de veterinarios */}
+      <Route path="/mascotas/:id" element={
+        <ProtectedRoute>
+          <MascotaDetallePage />
+        </ProtectedRoute>
+      } />
+      
+      {/* Rutas de veterinarios - Solo admin */}
       <Route path="/veterinarios/nuevo" element={
         <ProtectedRoute>
           {isAdmin ? <NuevoVeterinarioPage /> : <Navigate to="/" replace />}
