@@ -37,7 +37,6 @@ export class VeterinarioModel {
     return rows[0] || null;
   }
 
-  // 👇 NUEVO MÉTODO: Obtener todos los veterinarios
   static async findAll(): Promise<any[]> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT v.*, u.nombre, u.apellido, u.email, u.direccion 
@@ -50,7 +49,6 @@ export class VeterinarioModel {
     return rows;
   }
 
-  // 👇 NUEVO MÉTODO: Obtener veterinario por ID
   static async findById(id: number): Promise<any | null> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT v.*, u.nombre, u.apellido, u.email, u.direccion 

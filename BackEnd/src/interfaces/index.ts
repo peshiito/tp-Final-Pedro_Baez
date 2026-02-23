@@ -52,8 +52,7 @@ export interface IMascota {
   creado_en?: Date;
 }
 
-// Historial Clínico
-// Historial Clínico
+// Historial Clinico
 export interface IHistorialClinico {
   id?: number;
   mascota_id: number;
@@ -74,7 +73,7 @@ export interface IJWTPayload {
   perfilId?: number;
 }
 
-// Request con usuario (para middleware)
+// Request con usuario (para middleware y rutas)
 export interface IRequestWithUser extends Request {
   user?: IJWTPayload;
 }

@@ -1,0 +1,335 @@
+.mis-consultas-page {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.page-header .subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back:hover {
+  background: var(--surface-light);
+  border-color: var(--primary);
+  color: var(--primary-light);
+}
+
+/* Filtros */
+.filtros-section {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filtro-btn {
+  padding: 8px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filtro-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary-light);
+}
+
+.filtro-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+/* Estadísticas pequeñas */
+.stats-pequeñas {
+  display: flex;
+  gap: 20px;
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+}
+
+.stat-valor {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Grid de consultas */
+.consultas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.consulta-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.consulta-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background: var(--surface-light);
+}
+
+.consulta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.consulta-fecha {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.consulta-tipo {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.consulta-tipo.consulta {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.consulta-tipo.vacuna {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.consulta-tipo.cirugia {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.consulta-tipo.control {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.consulta-body {
+  margin-bottom: 16px;
+}
+
+.mascota-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.mascota-info h3 {
+  color: var(--text-primary);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.mascota-especie {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.dueno-info {
+  background: var(--surface-light);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.dueno-label {
+  color: var(--text-muted);
+  margin-right: 6px;
+}
+
+.dueno-nombre {
+  color: var(--primary-light);
+  font-weight: 500;
+}
+
+.diagnostico-preview,
+.tratamiento-preview {
+  margin-top: 12px;
+}
+
+.diagnostico-preview strong,
+.tratamiento-preview strong {
+  color: var(--text-secondary);
+  font-size: 13px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.diagnostico-preview p,
+.tratamiento-preview p {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.consulta-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.ver-detalle {
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.consulta-card:hover .ver-detalle {
+  transform: translateX(4px);
+}
+
+/* Estados vacíos */
+.no-consultas {
+  text-align: center;
+  padding: 60px 40px;
+  background: var(--surface);
+  border-radius: 20px;
+  border: 2px dashed var(--border);
+}
+
+.no-data-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.no-consultas h3 {
+  color: var(--text-primary);
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.no-consultas p {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+/* Loading */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-light);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  background: var(--error-bg);
+  border: 1px solid var(--error);
+  color: var(--error);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .mis-consultas-page {
+    padding: 16px;
+  }
+
+  .page-header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .filtros-section {
+    overflow-x: auto;
+    padding-bottom: 8px;
+  }
+
+  .consultas-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-pequeñas {
+    justify-content: space-around;
+  }
+}

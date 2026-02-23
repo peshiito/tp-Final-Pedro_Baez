@@ -39,12 +39,23 @@ export class UsuarioModel {
     return rows[0] || null;
   }
 
-  // NUEVO MÉTODO: Obtener todos los usuarios
   static async findAll(): Promise<(IUsuario & RowDataPacket)[]> {
     const [rows] = await pool.execute<(IUsuario & RowDataPacket)[]>(
       "SELECT id, nombre, apellido, email, direccion, rol_id, activo, creado_en FROM usuarios WHERE activo = true ORDER BY id DESC",
     );
 
+    return rows;
+  }
+
+  // NUEVO MÉTODO: Obtener usuarios por rol
+  static async findByRol(rolId: number): Promise<(IUsuario & RowDataPacket)[]> {
+    const [rows] = await pool.execute<(IUsuario & RowDataPacket)[]>(
+      `SELECT id, nombre, apellido, email, direccion, rol_id, activo, creado_en 
+       FROM usuarios 
+       WHERE activo = true AND rol_id = ?
+       ORDER BY nombre ASC`,
+      [rolId],
+    );
     return rows;
   }
 

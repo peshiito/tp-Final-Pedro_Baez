@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
-import api from '../services/api';
-import { useAuth } from '../hooks/useAuth';
-import './MascotaDetallePage.css';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import MainLayout from "../layouts/MainLayout";
+import api from "../services/api";
+import { useAuth } from "../hooks/useAuth";
+import "./MascotaDetallePage.css";
 
 const MascotaDetallePage = () => {
   const { id } = useParams();
@@ -12,21 +12,21 @@ const MascotaDetallePage = () => {
   const [mascota, setMascota] = useState(null);
   const [historial, setHistorial] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const [activeTab, setActiveTab] = useState('info');
+  const [error, setError] = useState("");
+  const [activeTab, setActiveTab] = useState("info");
 
   useEffect(() => {
     const fetchMascotaData = async () => {
       try {
         setLoading(true);
-        setError('');
-        
-        console.log('Cargando mascota ID:', id);
-        
+        setError("");
+
+        console.log("Cargando mascota ID:", id);
+
         // Obtener datos de la mascota
         const mascotaRes = await api.get(`/mascotas/${id}`);
-        console.log('Respuesta mascota:', mascotaRes.data);
-        
+        console.log("Respuesta mascota:", mascotaRes.data);
+
         // La respuesta puede venir en diferentes formatos
         const mascotaData = mascotaRes.data.mascota || mascotaRes.data;
         setMascota(mascotaData);
@@ -34,19 +34,22 @@ const MascotaDetallePage = () => {
         // Obtener historial de la mascota
         try {
           const historialRes = await api.get(`/historial/mascota/${id}`);
-          console.log('Respuesta historial:', historialRes.data);
-          
+          console.log("Respuesta historial:", historialRes.data);
+
           // El historial puede venir en diferentes formatos
-          const historialData = historialRes.data.historial || historialRes.data || [];
+          const historialData =
+            historialRes.data.historial || historialRes.data || [];
           setHistorial(Array.isArray(historialData) ? historialData : []);
         } catch (historialError) {
-          console.log('Error cargando historial (puede no existir aún):', historialError);
+          console.log(
+            "Error cargando historial (puede no existir aún):",
+            historialError,
+          );
           setHistorial([]);
         }
-        
       } catch (error) {
-        console.error('Error cargando datos:', error);
-        setError('No se pudo cargar la información de la mascota');
+        console.error("Error cargando datos:", error);
+        setError("No se pudo cargar la información de la mascota");
       } finally {
         setLoading(false);
       }
@@ -58,25 +61,30 @@ const MascotaDetallePage = () => {
   }, [id]);
 
   const formatDate = (dateString) => {
-    if (!dateString) return 'No especificada';
+    if (!dateString) return "No especificada";
     try {
-      return new Date(dateString).toLocaleDateString('es-ES', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
+      return new Date(dateString).toLocaleDateString("es-ES", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
       });
     } catch {
-      return 'Fecha inválida';
+      return "Fecha inválida";
     }
   };
 
   const getTipoColor = (tipo) => {
-    switch(tipo?.toUpperCase()) {
-      case 'CONSULTA': return 'consulta';
-      case 'VACUNA': return 'vacuna';
-      case 'CIRUGIA': return 'cirugia';
-      case 'CONTROL': return 'control';
-      default: return '';
+    switch (tipo?.toUpperCase()) {
+      case "CONSULTA":
+        return "consulta";
+      case "VACUNA":
+        return "vacuna";
+      case "CIRUGIA":
+        return "cirugia";
+      case "CONTROL":
+        return "control";
+      default:
+        return "";
     }
   };
 
@@ -97,8 +105,8 @@ const MascotaDetallePage = () => {
         <div className="mascota-detalle-error">
           <div className="error-icon">😢</div>
           <h2>Oops! Algo salió mal</h2>
-          <p>{error || 'No se encontró la mascota'}</p>
-          <button className="btn-back" onClick={() => navigate('/mascotas')}>
+          <p>{error || "No se encontró la mascota"}</p>
+          <button className="btn-back" onClick={() => navigate("/mascotas")}>
             Volver a Mascotas
           </button>
         </div>
@@ -111,18 +119,11 @@ const MascotaDetallePage = () => {
       <div className="mascota-detalle-page">
         {/* Header con navegación */}
         <div className="detalle-header">
-          <button className="btn-back" onClick={() => navigate('/mascotas')}>
+          <button className="btn-back" onClick={() => navigate("/mascotas")}>
             ← Volver a Mascotas
           </button>
           <div className="header-actions">
-            {(user?.rol === 'ADMIN' || user?.rol === 'VETERINARIO') && (
-              <button 
-                className="btn-nuevo-historial"
-                onClick={() => navigate(`/mascotas/${id}/historial/nuevo`)}
-              >
-                + Nuevo Historial
-              </button>
-            )}
+            {user?.rol === "ADMIN" || user?.rol === "VETERINARIO"}
           </div>
         </div>
 
@@ -130,12 +131,16 @@ const MascotaDetallePage = () => {
         <div className="mascota-profile">
           <div className="mascota-avatar">
             <span className="avatar-emoji">
-              {mascota.especie === 'Perro' ? '🐕' : 
-               mascota.especie === 'Gato' ? '🐈' : 
-               mascota.especie === 'Ave' ? '🦜' : '🐾'}
+              {mascota.especie === "Perro"
+                ? "🐕"
+                : mascota.especie === "Gato"
+                  ? "🐈"
+                  : mascota.especie === "Ave"
+                    ? "🦜"
+                    : "🐾"}
             </span>
           </div>
-          
+
           <div className="mascota-info-header">
             <h1>{mascota.nombre}</h1>
             <div className="mascota-badges">
@@ -147,15 +152,15 @@ const MascotaDetallePage = () => {
 
         {/* Tabs de navegación */}
         <div className="detalle-tabs">
-          <button 
-            className={`tab-btn ${activeTab === 'info' ? 'active' : ''}`}
-            onClick={() => setActiveTab('info')}
+          <button
+            className={`tab-btn ${activeTab === "info" ? "active" : ""}`}
+            onClick={() => setActiveTab("info")}
           >
             📋 Información General
           </button>
-          <button 
-            className={`tab-btn ${activeTab === 'historial' ? 'active' : ''}`}
-            onClick={() => setActiveTab('historial')}
+          <button
+            className={`tab-btn ${activeTab === "historial" ? "active" : ""}`}
+            onClick={() => setActiveTab("historial")}
           >
             📚 Historial Clínico ({historial.length})
           </button>
@@ -163,7 +168,7 @@ const MascotaDetallePage = () => {
 
         {/* Contenido de los tabs */}
         <div className="tab-content">
-          {activeTab === 'info' && (
+          {activeTab === "info" && (
             <div className="info-tab">
               <div className="info-grid">
                 <div className="info-card">
@@ -178,7 +183,9 @@ const MascotaDetallePage = () => {
                   </div>
                   <div className="info-row">
                     <span className="info-label">Raza:</span>
-                    <span className="info-value">{mascota.raza || 'No especificada'}</span>
+                    <span className="info-value">
+                      {mascota.raza || "No especificada"}
+                    </span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Sexo:</span>
@@ -190,25 +197,31 @@ const MascotaDetallePage = () => {
                   <h3>Datos Físicos</h3>
                   <div className="info-row">
                     <span className="info-label">Peso:</span>
-                    <span className="info-value">{mascota.peso ? `${mascota.peso} kg` : 'No especificado'}</span>
+                    <span className="info-value">
+                      {mascota.peso ? `${mascota.peso} kg` : "No especificado"}
+                    </span>
                   </div>
                   <div className="info-row">
                     <span className="info-label">Nacimiento:</span>
-                    <span className="info-value">{formatDate(mascota.fecha_nacimiento)}</span>
+                    <span className="info-value">
+                      {formatDate(mascota.fecha_nacimiento)}
+                    </span>
                   </div>
                 </div>
 
                 <div className="info-card dueno-card">
                   <h3>Dueño Responsable</h3>
                   <div className="dueno-info-compact">
-                    <div className="dueno-avatar">
-                      👤
-                    </div>
+                    <div className="dueno-avatar">👤</div>
                     <div className="dueno-details">
-                      <p className="dueno-nombre">{mascota.dueno_nombre} {mascota.dueno_apellido}</p>
+                      <p className="dueno-nombre">
+                        {mascota.dueno_nombre} {mascota.dueno_apellido}
+                      </p>
                       <p className="dueno-email">{mascota.dueno_email}</p>
                       {mascota.dueno_telefono && (
-                        <p className="dueno-telefono">📞 {mascota.dueno_telefono}</p>
+                        <p className="dueno-telefono">
+                          📞 {mascota.dueno_telefono}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -217,18 +230,11 @@ const MascotaDetallePage = () => {
             </div>
           )}
 
-          {activeTab === 'historial' && (
+          {activeTab === "historial" && (
             <div className="historial-tab">
               <div className="historial-header">
                 <h2>Historial Clínico</h2>
-                {(user?.rol === 'ADMIN' || user?.rol === 'VETERINARIO') && (
-                  <button 
-                    className="btn-nuevo-historial"
-                    onClick={() => navigate(`/mascotas/${id}/historial/nuevo`)}
-                  >
-                    + Nueva Entrada
-                  </button>
-                )}
+                {user?.rol === "ADMIN" || user?.rol === "VETERINARIO"}
               </div>
 
               {historial.length === 0 ? (
@@ -236,30 +242,29 @@ const MascotaDetallePage = () => {
                   <div className="no-historial-icon">📭</div>
                   <h3>No hay historial clínico</h3>
                   <p>Este paciente aún no tiene registros médicos</p>
-                  {(user?.rol === 'ADMIN' || user?.rol === 'VETERINARIO') && (
-                    <button 
-                      className="btn-primary"
-                      onClick={() => navigate(`/mascotas/${id}/historial/nuevo`)}
-                    >
-                      Crear primera entrada
-                    </button>
-                  )}
+                  {user?.rol === "ADMIN" || user?.rol === "VETERINARIO"}
                 </div>
               ) : (
                 <div className="historial-timeline">
                   {historial.map((entry, index) => (
                     <div key={entry.id} className="timeline-entry">
                       <div className="timeline-marker">
-                        <div className={`marker-dot ${getTipoColor(entry.tipo)}`}></div>
-                        {index < historial.length - 1 && <div className="marker-line"></div>}
+                        <div
+                          className={`marker-dot ${getTipoColor(entry.tipo)}`}
+                        ></div>
+                        {index < historial.length - 1 && (
+                          <div className="marker-line"></div>
+                        )}
                       </div>
-                      
+
                       <div className="entry-card">
                         <div className="entry-header">
                           <div className="entry-date">
-                            {new Date(entry.fecha).toLocaleDateString('es-ES')}
+                            {new Date(entry.fecha).toLocaleDateString("es-ES")}
                           </div>
-                          <div className={`entry-type ${getTipoColor(entry.tipo)}`}>
+                          <div
+                            className={`entry-type ${getTipoColor(entry.tipo)}`}
+                          >
                             {entry.tipo}
                           </div>
                         </div>
@@ -267,7 +272,10 @@ const MascotaDetallePage = () => {
                         <div className="entry-body">
                           <div className="entry-vet">
                             <span className="vet-label">Atendió:</span>
-                            <span className="vet-name">{entry.veterinario_nombre} {entry.veterinario_apellido}</span>
+                            <span className="vet-name">
+                              {entry.veterinario_nombre}{" "}
+                              {entry.veterinario_apellido}
+                            </span>
                           </div>
 
                           <div className="entry-diagnostico">

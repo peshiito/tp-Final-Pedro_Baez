@@ -1,12 +1,9 @@
-import { Request, Response, NextFunction } from "express";
-import { verifyToken } from "../utils/jwt.helper";
-
-export interface AuthRequest extends Request {
-  user?: any;
-}
+import { Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import { IJWTPayload, IRequestWithUser } from "../interfaces";
 
 export const authenticate = (
-  req: AuthRequest,
+  req: IRequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
@@ -17,7 +14,10 @@ export const authenticate = (
       return res.status(401).json({ message: "Token no proporcionado" });
     }
 
-    const decoded = verifyToken(token);
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET || "secreto",
+    ) as IJWTPayload;
     req.user = decoded;
     next();
   } catch (error) {
@@ -26,7 +26,7 @@ export const authenticate = (
 };
 
 export const authorize = (...roles: string[]) => {
-  return (req: AuthRequest, res: Response, next: NextFunction) => {
+  return (req: IRequestWithUser, res: Response, next: NextFunction) => {
     if (!req.user) {
       return res.status(401).json({ message: "No autenticado" });
     }

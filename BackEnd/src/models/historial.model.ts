@@ -38,10 +38,15 @@ export class HistorialModel {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT h.*, 
                     m.nombre as mascota_nombre,
+                    m.especie as mascota_especie,
                     u.nombre as veterinario_nombre,
-                    u.apellido as veterinario_apellido
+                    u.apellido as veterinario_apellido,
+                    du.nombre as dueno_nombre,
+                    du.apellido as dueno_apellido
              FROM historiales_clinicos h
              JOIN mascotas m ON h.mascota_id = m.id
+             JOIN duenos d ON m.dueno_id = d.id
+             JOIN usuarios du ON d.usuario_id = du.id
              JOIN veterinarios v ON h.veterinario_id = v.id
              JOIN usuarios u ON v.usuario_id = u.id
              WHERE h.mascota_id = ?
@@ -52,15 +57,44 @@ export class HistorialModel {
     return rows;
   }
 
+  // Obtener historial por veterinario
+  static async findByVeterinarioId(veterinarioId: number): Promise<any[]> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT h.*, 
+                    m.nombre as mascota_nombre,
+                    m.especie as mascota_especie,
+                    u.nombre as veterinario_nombre,
+                    u.apellido as veterinario_apellido,
+                    du.nombre as dueno_nombre,
+                    du.apellido as dueno_apellido
+             FROM historiales_clinicos h
+             JOIN mascotas m ON h.mascota_id = m.id
+             JOIN duenos d ON m.dueno_id = d.id
+             JOIN usuarios du ON d.usuario_id = du.id
+             JOIN veterinarios v ON h.veterinario_id = v.id
+             JOIN usuarios u ON v.usuario_id = u.id
+             WHERE h.veterinario_id = ?
+             ORDER BY h.fecha DESC, h.creado_en DESC`,
+      [veterinarioId],
+    );
+
+    return rows;
+  }
+
   // Obtener una entrada específica
   static async findById(id: number): Promise<any | null> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       `SELECT h.*, 
                     m.nombre as mascota_nombre,
+                    m.especie as mascota_especie,
                     u.nombre as veterinario_nombre,
-                    u.apellido as veterinario_apellido
+                    u.apellido as veterinario_apellido,
+                    du.nombre as dueno_nombre,
+                    du.apellido as dueno_apellido
              FROM historiales_clinicos h
              JOIN mascotas m ON h.mascota_id = m.id
+             JOIN duenos d ON m.dueno_id = d.id
+             JOIN usuarios du ON d.usuario_id = du.id
              JOIN veterinarios v ON h.veterinario_id = v.id
              JOIN usuarios u ON v.usuario_id = u.id
              WHERE h.id = ?`,
