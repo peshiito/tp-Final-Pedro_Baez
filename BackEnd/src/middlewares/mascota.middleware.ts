@@ -3,14 +3,12 @@ import { IRequestWithUser } from "../interfaces";
 import { DuenoModel } from "../models/dueno.model";
 import { MascotaModel } from "../models/mascota.model";
 
-// Middleware para verificar que el usuario puede acceder a la mascota
 export const canAccessMascota = async (
   req: IRequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    // CORRECCIÓN: Asegurar que params.id es string
     const idParam = req.params.id;
     if (Array.isArray(idParam)) {
       return res.status(400).json({ message: "ID de mascota inválido" });
@@ -18,7 +16,6 @@ export const canAccessMascota = async (
 
     const mascotaId = parseInt(idParam);
 
-    // Verificar que el ID es válido
     if (isNaN(mascotaId)) {
       return res.status(400).json({ message: "ID de mascota inválido" });
     }
