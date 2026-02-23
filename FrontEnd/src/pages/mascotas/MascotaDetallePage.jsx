@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
-import api from "../services/api";
-import { useAuth } from "../hooks/useAuth";
+import MainLayout from "../../layouts/MainLayout";
+import api from "../../services/api";
+import { useAuth } from "../../hooks/useAuth";
 import "./MascotaDetallePage.css";
 
 const MascotaDetallePage = () => {

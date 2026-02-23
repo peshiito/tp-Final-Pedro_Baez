@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import MainLayout from "../layouts/MainLayout";
-import api from "../services/api";
+import { useNavigate } from "react-router-dom";
+import MainLayout from "../../layouts/MainLayout";
+import api from "../../services/api";
 import "./DuenosPage.css";
 
 const DuenosPage = () => {
@@ -68,7 +68,9 @@ const DuenosPage = () => {
       setDueno(duenoCompleto);
 
       // Buscamos las mascotas de ese dueño
-      const mascotasResponse = await api.get(`/mascotas/dueno/${duenoEncontrado.id}`);
+      const mascotasResponse = await api.get(
+        `/mascotas/dueno/${duenoEncontrado.id}`,
+      );
       setMascotas(mascotasResponse.data.mascotas || []);
     } catch (error) {
       console.error("Error en búsqueda:", error);
@@ -156,7 +158,7 @@ const DuenosPage = () => {
                       key={mascota.id}
                       className="mascota-card"
                       onClick={() => verDetalleMascota(mascota.id)}
-                      style={{ cursor: 'pointer' }}
+                      style={{ cursor: "pointer" }}
                     >
                       <h3>{mascota.nombre}</h3>
                       <div className="mascota-details">

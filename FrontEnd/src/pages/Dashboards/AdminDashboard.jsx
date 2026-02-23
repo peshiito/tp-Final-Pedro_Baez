@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
-import { useAuth } from '../hooks/useAuth';
-import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import './AdminDashboard.css';
+import React, { useState, useEffect } from "react";
+import MainLayout from "../../layouts/MainLayout";
+import { useAuth } from "../../hooks/useAuth";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import "./AdminDashboard.css";
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -11,58 +11,59 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState({
     mascotas: 0,
     veterinarios: 0,
-    duenos: 0
+    duenos: 0,
   });
   const [recientes, setRecientes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        setError('');
-        
-        console.log('Obteniendo datos del dashboard...');
-        
+        setError("");
+
+        console.log("Obteniendo datos del dashboard...");
+
         // Obtener estadísticas manejando diferentes estructuras de respuesta
-        const mascotasRes = await api.get('/mascotas');
-        const veterinariosRes = await api.get('/veterinarios');
-        const duenosRes = await api.get('/duenos');
-        
-        console.log('Respuesta mascotas:', mascotasRes.data);
-        console.log('Respuesta veterinarios:', veterinariosRes.data);
-        console.log('Respuesta dueños:', duenosRes.data);
+        const mascotasRes = await api.get("/mascotas");
+        const veterinariosRes = await api.get("/veterinarios");
+        const duenosRes = await api.get("/duenos");
+
+        console.log("Respuesta mascotas:", mascotasRes.data);
+        console.log("Respuesta veterinarios:", veterinariosRes.data);
+        console.log("Respuesta dueños:", duenosRes.data);
 
         // Extraer datos según la estructura de respuesta
-        const mascotasCount = Array.isArray(mascotasRes.data) 
-          ? mascotasRes.data.length 
+        const mascotasCount = Array.isArray(mascotasRes.data)
+          ? mascotasRes.data.length
           : mascotasRes.data.mascotas?.length || 0;
-          
-        const veterinariosCount = Array.isArray(veterinariosRes.data) 
-          ? veterinariosRes.data.length 
+
+        const veterinariosCount = Array.isArray(veterinariosRes.data)
+          ? veterinariosRes.data.length
           : veterinariosRes.data?.length || 0;
-          
-        const duenosCount = Array.isArray(duenosRes.data) 
-          ? duenosRes.data.length 
+
+        const duenosCount = Array.isArray(duenosRes.data)
+          ? duenosRes.data.length
           : duenosRes.data?.length || 0;
-        
+
         setStats({
           mascotas: mascotasCount,
           veterinarios: veterinariosCount,
-          duenos: duenosCount
+          duenos: duenosCount,
         });
 
         // Obtener mascotas recientes
-        const mascotasList = Array.isArray(mascotasRes.data) 
-          ? mascotasRes.data 
+        const mascotasList = Array.isArray(mascotasRes.data)
+          ? mascotasRes.data
           : mascotasRes.data.mascotas || [];
-          
-        setRecientes(mascotasList.slice(0, 5));
 
+        setRecientes(mascotasList.slice(0, 5));
       } catch (error) {
-        console.error('Error cargando dashboard:', error);
-        setError('Error al cargar los datos. Verifica la conexión con el backend.');
+        console.error("Error cargando dashboard:", error);
+        setError(
+          "Error al cargar los datos. Verifica la conexión con el backend.",
+        );
       } finally {
         setLoading(false);
       }
@@ -78,37 +79,37 @@ const AdminDashboard = () => {
 
   const acciones = [
     {
-      icon: '🔍',
-      titulo: 'Buscar Dueño',
-      descripcion: 'Buscar dueños por email y ver sus mascotas',
-      path: '/duenos',
-      color: 'primary',
-      stats: stats.duenos
+      icon: "🔍",
+      titulo: "Buscar Dueño",
+      descripcion: "Buscar dueños por email y ver sus mascotas",
+      path: "/duenos",
+      color: "primary",
+      stats: stats.duenos,
     },
     {
-      icon: '🐕',
-      titulo: 'Nueva Mascota',
-      descripcion: 'Registrar una nueva mascota',
-      path: '/mascotas/nueva',
-      color: 'secondary',
-      stats: stats.mascotas
+      icon: "🐕",
+      titulo: "Nueva Mascota",
+      descripcion: "Registrar una nueva mascota",
+      path: "/mascotas/nueva",
+      color: "secondary",
+      stats: stats.mascotas,
     },
     {
-      icon: '👤',
-      titulo: 'Nuevo Dueño',
-      descripcion: 'Registrar un nuevo dueño',
-      path: '/duenos/nuevo',
-      color: 'primary',
-      stats: null
+      icon: "👤",
+      titulo: "Nuevo Dueño",
+      descripcion: "Registrar un nuevo dueño",
+      path: "/duenos/nuevo",
+      color: "primary",
+      stats: null,
     },
     {
-      icon: '👨‍⚕️',
-      titulo: 'Nuevo Veterinario',
-      descripcion: 'Registrar un veterinario',
-      path: '/veterinarios/nuevo',
-      color: 'secondary',
-      stats: stats.veterinarios
-    }
+      icon: "👨‍⚕️",
+      titulo: "Nuevo Veterinario",
+      descripcion: "Registrar un veterinario",
+      path: "/veterinarios/nuevo",
+      color: "secondary",
+      stats: stats.veterinarios,
+    },
   ];
 
   return (
@@ -117,13 +118,19 @@ const AdminDashboard = () => {
         {/* Header con bienvenida */}
         <div className="welcome-header">
           <div className="welcome-text">
-            <h1>¡Bienvenido, <span className="user-name-highlight">{user?.nombre}!</span></h1>
-            <p className="welcome-subtitle">Panel de Administración • {new Date().toLocaleDateString('es-ES', { 
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric' 
-            })}</p>
+            <h1>
+              ¡Bienvenido,{" "}
+              <span className="user-name-highlight">{user?.nombre}!</span>
+            </h1>
+            <p className="welcome-subtitle">
+              Panel de Administración •{" "}
+              {new Date().toLocaleDateString("es-ES", {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+            </p>
           </div>
           <div className="header-stats">
             <div className="mini-stat">
@@ -156,14 +163,18 @@ const AdminDashboard = () => {
           <>
             {/* Tarjetas de estadísticas */}
             <div className="stats-grid">
-              <div className="stat-card primary" onClick={() => navigate('/mascotas')} style={{ cursor: 'pointer' }}>
+              <div
+                className="stat-card primary"
+                onClick={() => navigate("/mascotas")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="stat-icon">🐕</div>
                 <div className="stat-content">
                   <span className="stat-label">Total Mascotas</span>
                   <span className="stat-value">{stats.mascotas}</span>
                 </div>
                 <div className="stat-trend">
-                  {stats.mascotas > 0 ? '📈 Ver todas' : '⏳ Sin datos'}
+                  {stats.mascotas > 0 ? "📈 Ver todas" : "⏳ Sin datos"}
                 </div>
               </div>
 
@@ -174,18 +185,22 @@ const AdminDashboard = () => {
                   <span className="stat-value">{stats.veterinarios}</span>
                 </div>
                 <div className="stat-trend">
-                  {stats.veterinarios > 0 ? '✅ Activos' : '⏳ Sin datos'}
+                  {stats.veterinarios > 0 ? "✅ Activos" : "⏳ Sin datos"}
                 </div>
               </div>
 
-              <div className="stat-card warning" onClick={() => navigate('/duenos')} style={{ cursor: 'pointer' }}>
+              <div
+                className="stat-card warning"
+                onClick={() => navigate("/duenos")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="stat-icon">👥</div>
                 <div className="stat-content">
                   <span className="stat-label">Dueños</span>
                   <span className="stat-value">{stats.duenos}</span>
                 </div>
                 <div className="stat-trend">
-                  {stats.duenos > 0 ? '📊 Ver todos' : '⏳ Sin datos'}
+                  {stats.duenos > 0 ? "📊 Ver todos" : "⏳ Sin datos"}
                 </div>
               </div>
             </div>
@@ -219,23 +234,33 @@ const AdminDashboard = () => {
             {/* Mascotas recientes */}
             {recientes.length > 0 && (
               <div className="recientes-section">
-                <h2 className="section-title">Mascotas Registradas Recientemente</h2>
+                <h2 className="section-title">
+                  Mascotas Registradas Recientemente
+                </h2>
                 <div className="recientes-grid">
-                  {recientes.map(mascota => (
-                    <div 
-                      key={mascota.id} 
+                  {recientes.map((mascota) => (
+                    <div
+                      key={mascota.id}
                       className="reciente-card"
                       onClick={() => verDetalleMascota(mascota.id)}
                     >
                       <div className="reciente-icon">
-                        {mascota.especie === 'Perro' ? '🐕' : 
-                         mascota.especie === 'Gato' ? '🐈' : 
-                         mascota.especie === 'Ave' ? '🦜' : '🐾'}
+                        {mascota.especie === "Perro"
+                          ? "🐕"
+                          : mascota.especie === "Gato"
+                            ? "🐈"
+                            : mascota.especie === "Ave"
+                              ? "🦜"
+                              : "🐾"}
                       </div>
                       <div className="reciente-info">
                         <h4>{mascota.nombre}</h4>
-                        <p>{mascota.especie} • {mascota.raza || 'Sin raza'}</p>
-                        <small>Dueño: {mascota.dueno_nombre} {mascota.dueno_apellido}</small>
+                        <p>
+                          {mascota.especie} • {mascota.raza || "Sin raza"}
+                        </p>
+                        <small>
+                          Dueño: {mascota.dueno_nombre} {mascota.dueno_apellido}
+                        </small>
                       </div>
                     </div>
                   ))}
@@ -244,27 +269,32 @@ const AdminDashboard = () => {
             )}
 
             {/* Empty state */}
-            {stats.mascotas === 0 && stats.veterinarios === 0 && stats.duenos === 0 && !loading && (
-              <div className="empty-state">
-                <div className="empty-icon">📊</div>
-                <h3>No hay datos disponibles</h3>
-                <p>Comienza registrando tu primer dueño, mascota o veterinario</p>
-                <div className="empty-actions">
-                  <button 
-                    className="btn-primary"
-                    onClick={() => navigate('/duenos/nuevo')}
-                  >
-                    + Nuevo Dueño
-                  </button>
-                  <button 
-                    className="btn-secondary"
-                    onClick={() => navigate('/veterinarios/nuevo')}
-                  >
-                    + Nuevo Veterinario
-                  </button>
+            {stats.mascotas === 0 &&
+              stats.veterinarios === 0 &&
+              stats.duenos === 0 &&
+              !loading && (
+                <div className="empty-state">
+                  <div className="empty-icon">📊</div>
+                  <h3>No hay datos disponibles</h3>
+                  <p>
+                    Comienza registrando tu primer dueño, mascota o veterinario
+                  </p>
+                  <div className="empty-actions">
+                    <button
+                      className="btn-primary"
+                      onClick={() => navigate("/duenos/nuevo")}
+                    >
+                      + Nuevo Dueño
+                    </button>
+                    <button
+                      className="btn-secondary"
+                      onClick={() => navigate("/veterinarios/nuevo")}
+                    >
+                      + Nuevo Veterinario
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </>
         )}
       </div>

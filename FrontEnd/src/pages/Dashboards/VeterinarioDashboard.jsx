@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import MainLayout from "../layouts/MainLayout";
-import { useAuth } from "../hooks/useAuth";
-import api from "../services/api";
+import MainLayout from "../../layouts/MainLayout";
+import { useAuth } from "../../hooks/useAuth";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import "./VeterinarioDashboard.css";
 
