@@ -52,14 +52,16 @@ export interface IMascota {
   creado_en?: Date;
 }
 
-// Historial Clínico
+// Historial Clinico
 export interface IHistorialClinico {
   id?: number;
   mascota_id: number;
   veterinario_id: number;
-  tipo: "CONSULTA" | "VACUNA" | "CIRUGIA" | "CONTROL";
-  descripcion: string;
   fecha: Date;
+  tipo: "CONSULTA" | "VACUNA" | "CIRUGIA" | "CONTROL";
+  diagnostico: string;
+  tratamiento?: string;
+  observaciones?: string;
   creado_en?: Date;
 }
 
@@ -71,7 +73,7 @@ export interface IJWTPayload {
   perfilId?: number;
 }
 
-// Request con usuario (para middleware)
+// Request con usuario (para middleware y rutas)
 export interface IRequestWithUser extends Request {
   user?: IJWTPayload;
 }

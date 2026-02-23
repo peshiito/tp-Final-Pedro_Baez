@@ -36,4 +36,28 @@ export class VeterinarioModel {
 
     return rows[0] || null;
   }
+
+  static async findAll(): Promise<any[]> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT v.*, u.nombre, u.apellido, u.email, u.direccion 
+             FROM veterinarios v
+             JOIN usuarios u ON v.usuario_id = u.id
+             WHERE u.activo = true
+             ORDER BY u.nombre ASC`,
+    );
+
+    return rows;
+  }
+
+  static async findById(id: number): Promise<any | null> {
+    const [rows] = await pool.execute<RowDataPacket[]>(
+      `SELECT v.*, u.nombre, u.apellido, u.email, u.direccion 
+             FROM veterinarios v
+             JOIN usuarios u ON v.usuario_id = u.id
+             WHERE v.id = ?`,
+      [id],
+    );
+
+    return rows[0] || null;
+  }
 }

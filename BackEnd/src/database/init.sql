@@ -48,12 +48,9 @@ CREATE TABLE veterinarios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
-
 -- =========================
 -- MASCOTAS
 -- =========================
-
-
 CREATE TABLE IF NOT EXISTS mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -65,6 +62,23 @@ CREATE TABLE IF NOT EXISTS mascotas (
     dueno_id INT NOT NULL,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (dueno_id) REFERENCES duenos(id) ON DELETE CASCADE
+);
+
+-- =========================
+-- HISTORIALES CLINICOS
+-- =========================
+CREATE TABLE IF NOT EXISTS historiales_clinicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mascota_id INT NOT NULL,
+    veterinario_id INT NOT NULL,
+    fecha DATE NOT NULL,
+    tipo ENUM('CONSULTA', 'VACUNA', 'CIRUGIA', 'CONTROL') NOT NULL,
+    diagnostico TEXT NOT NULL,
+    tratamiento TEXT,
+    observaciones TEXT,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (mascota_id) REFERENCES mascotas(id) ON DELETE CASCADE,
+    FOREIGN KEY (veterinario_id) REFERENCES veterinarios(id) ON DELETE RESTRICT
 );
 
 -- =========================
