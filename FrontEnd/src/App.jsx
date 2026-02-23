@@ -3,17 +3,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./providers/AuthProvider";
 import { useAuth } from "./hooks/useAuth";
 import LoginPage from "./pages/LoginPage";
-import AdminDashboard from "./pages/AdminDashboard";
-import VeterinarioDashboard from "./pages/VeterinarioDashboard";
-import DuenosPage from "./pages/DuenosPage";
+import AdminDashboard from "./pages/Dashboards/AdminDashboard";
+import VeterinarioDashboard from "./pages/Dashboards/VeterinarioDashboard";
+import DuenosPage from "./pages/duenos/DuenosPage";
 import NuevoDuenoPage from "./pages/NuevoDuenoPage";
-import MascotasPage from "./pages/MascotasPage";
-import NuevaMascotaPage from "./pages/NuevaMascotaPage";
-import MascotaDetallePage from "./pages/MascotaDetallePage";
-import NuevoVeterinarioPage from "./pages/NuevoVeterinarioPage";
-import NuevaConsultaPage from "./pages/NuevaConsultaPage";
-import MisConsultasPage from "./pages/MisConsultasPage";
-import MascotasAtendidasPage from "./pages/MascotasAtendidasPage";
+import MascotasPage from "./pages/mascotas/MascotasPage";
+import NuevaMascotaPage from "./pages/mascotas/NuevaMascotaPage";
+import MascotaDetallePage from "./pages/mascotas/MascotaDetallePage";
+import NuevoVeterinarioPage from "./pages/veterinarios/NuevoVeterinarioPage";
+import NuevaConsultaPage from "./pages/veterinarios/NuevaConsultaPage";
+import MisConsultasPage from "./pages/veterinarios/MisConsultasPage";
+import MascotasAtendidasPage from "./pages/mascotas/MascotasAtendidasPage";
 import "./App.css";
 
 const ProtectedRoute = ({ children }) => {

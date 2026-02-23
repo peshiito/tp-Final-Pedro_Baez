@@ -1,1 +1,3 @@
 # Proyecto final de Patitas Felices
+
+README EN PROCESO MAS RESTRUCTURACION DE CARPETAS

@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
-import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import './NuevaMascotaPage.css';
+import React, { useState, useEffect } from "react";
+import MainLayout from "../../layouts/MainLayout";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import "./NuevaMascotaPage.css";
 
 const NuevaMascotaPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [successData, setSuccessData] = useState(null);
   const [duenos, setDuenos] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [formSubmitted, setFormSubmitted] = useState(false); // Prevenir doble envío
 
   const [formData, setFormData] = useState({
-    nombre: '',
-    especie: '',
-    raza: '',
-    sexo: 'MACHO',
-    fecha_nacimiento: '',
-    peso: '',
-    dueno_id: ''
+    nombre: "",
+    especie: "",
+    raza: "",
+    sexo: "MACHO",
+    fecha_nacimiento: "",
+    peso: "",
+    dueno_id: "",
   });
 
   // Cargar lista de dueños
   useEffect(() => {
     const fetchDuenos = async () => {
       try {
-        const response = await api.get('/duenos');
+        const response = await api.get("/duenos");
         setDuenos(response.data || []);
       } catch (error) {
-        console.error('Error cargando dueños:', error);
+        console.error("Error cargando dueños:", error);
       }
     };
 
@@ -41,60 +41,66 @@ const NuevaMascotaPage = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   // Filtrar dueños por búsqueda
-  const duenosFiltrados = duenos.filter(dueno => 
-    `${dueno.nombre} ${dueno.apellido}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dueno.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    dueno.dni?.includes(searchTerm)
+  const duenosFiltrados = duenos.filter(
+    (dueno) =>
+      `${dueno.nombre} ${dueno.apellido}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      dueno.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dueno.dni?.includes(searchTerm),
   );
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Prevenir doble envío
     if (formSubmitted || loading) return;
-    
+
     setFormSubmitted(true);
     setLoading(true);
-    setError('');
+    setError("");
     setSuccess(false);
 
     try {
-      const token = localStorage.getItem('token');
-      
+      const token = localStorage.getItem("token");
+
       const mascotaData = {
         ...formData,
-        peso: formData.peso ? parseFloat(formData.peso) : null
+        peso: formData.peso ? parseFloat(formData.peso) : null,
       };
 
-      const response = await api.post('/mascotas', mascotaData, {
+      const response = await api.post("/mascotas", mascotaData, {
         headers: {
-          'Authorization': `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       // Obtener el nombre del dueño seleccionado para mostrar en el mensaje
-      const duenoSeleccionado = duenos.find(d => d.id === parseInt(formData.dueno_id));
-      
+      const duenoSeleccionado = duenos.find(
+        (d) => d.id === parseInt(formData.dueno_id),
+      );
+
       setSuccessData({
         nombre: formData.nombre,
         especie: formData.especie,
-        dueno: duenoSeleccionado ? `${duenoSeleccionado.nombre} ${duenoSeleccionado.apellido}` : 'Desconocido'
+        dueno: duenoSeleccionado
+          ? `${duenoSeleccionado.nombre} ${duenoSeleccionado.apellido}`
+          : "Desconocido",
       });
-      
+
       setSuccess(true);
-      
+
       // Opción 1: Redirigir después de 3 segundos
       setTimeout(() => {
-        navigate('/mascotas');
+        navigate("/mascotas");
       }, 3000);
-      
     } catch (error) {
-      setError(error.response?.data?.message || 'Error al crear la mascota');
+      setError(error.response?.data?.message || "Error al crear la mascota");
       setFormSubmitted(false); // Permitir reintentar en caso de error
     } finally {
       setLoading(false);
@@ -107,15 +113,15 @@ const NuevaMascotaPage = () => {
     setSuccessData(null);
     setFormSubmitted(false);
     setFormData({
-      nombre: '',
-      especie: '',
-      raza: '',
-      sexo: 'MACHO',
-      fecha_nacimiento: '',
-      peso: '',
-      dueno_id: ''
+      nombre: "",
+      especie: "",
+      raza: "",
+      sexo: "MACHO",
+      fecha_nacimiento: "",
+      peso: "",
+      dueno_id: "",
     });
-    setSearchTerm('');
+    setSearchTerm("");
   };
 
   return (
@@ -123,7 +129,7 @@ const NuevaMascotaPage = () => {
       <div className="nueva-mascota-page">
         <div className="page-header">
           <h1>Registrar Nueva Mascota</h1>
-          <button className="btn-back" onClick={() => navigate('/mascotas')}>
+          <button className="btn-back" onClick={() => navigate("/mascotas")}>
             ← Volver
           </button>
         </div>
@@ -134,26 +140,37 @@ const NuevaMascotaPage = () => {
               <strong>❌ Error:</strong> {error}
             </div>
           )}
-          
+
           {success && successData && (
             <div className="success-message-visible">
               <div className="success-icon">✅</div>
               <div className="success-content">
                 <h3>¡Mascota creada exitosamente!</h3>
                 <div className="success-details">
-                  <p><strong>Nombre:</strong> {successData.nombre}</p>
-                  <p><strong>Especie:</strong> {successData.especie}</p>
-                  <p><strong>Dueño:</strong> {successData.dueno}</p>
+                  <p>
+                    <strong>Nombre:</strong> {successData.nombre}
+                  </p>
+                  <p>
+                    <strong>Especie:</strong> {successData.especie}
+                  </p>
+                  <p>
+                    <strong>Dueño:</strong> {successData.dueno}
+                  </p>
                 </div>
                 <div className="success-actions">
                   <button className="btn-secondary" onClick={handleCrearOtra}>
                     + Crear otra mascota
                   </button>
-                  <button className="btn-primary" onClick={() => navigate('/mascotas')}>
+                  <button
+                    className="btn-primary"
+                    onClick={() => navigate("/mascotas")}
+                  >
                     Ver listado
                   </button>
                 </div>
-                <p className="redirect-message">Redirigiendo al listado en 3 segundos...</p>
+                <p className="redirect-message">
+                  Redirigiendo al listado en 3 segundos...
+                </p>
               </div>
             </div>
           )}
@@ -162,7 +179,7 @@ const NuevaMascotaPage = () => {
             <form onSubmit={handleSubmit} className="mascota-form">
               {/* Datos de la mascota */}
               <h2 className="form-section-title">Datos de la Mascota</h2>
-              
+
               <div className="form-grid">
                 <div className="form-group">
                   <label htmlFor="nombre">Nombre *</label>
@@ -256,7 +273,7 @@ const NuevaMascotaPage = () => {
 
               {/* Selección de dueño */}
               <h2 className="form-section-title">Seleccionar Dueño</h2>
-              
+
               <div className="dueno-search">
                 <input
                   type="text"
@@ -272,14 +289,19 @@ const NuevaMascotaPage = () => {
                 {duenosFiltrados.length === 0 ? (
                   <p className="no-duenos">No se encontraron dueños</p>
                 ) : (
-                  duenosFiltrados.map(dueno => (
+                  duenosFiltrados.map((dueno) => (
                     <div
                       key={dueno.id}
-                      className={`dueno-option ${formData.dueno_id === dueno.id ? 'selected' : ''}`}
-                      onClick={() => !loading && setFormData({...formData, dueno_id: dueno.id})}
+                      className={`dueno-option ${formData.dueno_id === dueno.id ? "selected" : ""}`}
+                      onClick={() =>
+                        !loading &&
+                        setFormData({ ...formData, dueno_id: dueno.id })
+                      }
                     >
                       <div className="dueno-option-info">
-                        <strong>{dueno.nombre} {dueno.apellido}</strong>
+                        <strong>
+                          {dueno.nombre} {dueno.apellido}
+                        </strong>
                         <span>{dueno.email}</span>
                         {dueno.dni && <span>DNI: {dueno.dni}</span>}
                       </div>
@@ -291,20 +313,27 @@ const NuevaMascotaPage = () => {
                 )}
               </div>
 
-              {formData.dueno_id === '' && (
-                <p className="warning-message">⚠️ Debe seleccionar un dueño para la mascota</p>
+              {formData.dueno_id === "" && (
+                <p className="warning-message">
+                  ⚠️ Debe seleccionar un dueño para la mascota
+                </p>
               )}
 
               <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={() => navigate('/mascotas')} disabled={loading}>
+                <button
+                  type="button"
+                  className="btn-cancel"
+                  onClick={() => navigate("/mascotas")}
+                  disabled={loading}
+                >
                   Cancelar
                 </button>
-                <button 
-                  type="submit" 
-                  className="btn-submit" 
+                <button
+                  type="submit"
+                  className="btn-submit"
                   disabled={loading || !formData.dueno_id || formSubmitted}
                 >
-                  {loading ? 'Creando...' : 'Crear Mascota'}
+                  {loading ? "Creando..." : "Crear Mascota"}
                 </button>
               </div>
             </form>

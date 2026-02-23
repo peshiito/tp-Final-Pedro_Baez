@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
-import api from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import './MascotasPage.css';
+import React, { useState, useEffect } from "react";
+import MainLayout from "../../layouts/MainLayout";
+import api from "../../services/api";
+import { useNavigate } from "react-router-dom";
+import "./MascotasPage.css";
 
 const MascotasPage = () => {
   const navigate = useNavigate();
   const [mascotas, setMascotas] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchMascotas = async () => {
       try {
-        const response = await api.get('/mascotas');
+        const response = await api.get("/mascotas");
         setMascotas(response.data.mascotas || []);
       } catch (error) {
-        console.error('Error cargando mascotas:', error);
+        console.error("Error cargando mascotas:", error);
       } finally {
         setLoading(false);
       }
@@ -25,9 +25,12 @@ const MascotasPage = () => {
     fetchMascotas();
   }, []);
 
-  const mascotasFiltradas = mascotas.filter(mascota => 
-    mascota.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    `${mascota.dueno_nombre} ${mascota.dueno_apellido}`.toLowerCase().includes(searchTerm.toLowerCase())
+  const mascotasFiltradas = mascotas.filter(
+    (mascota) =>
+      mascota.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${mascota.dueno_nombre} ${mascota.dueno_apellido}`
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   const handleVerMascota = (id) => {
@@ -39,7 +42,10 @@ const MascotasPage = () => {
       <div className="mascotas-page">
         <div className="page-header">
           <h1>Mascotas</h1>
-          <button className="btn-primary" onClick={() => navigate('/mascotas/nueva')}>
+          <button
+            className="btn-primary"
+            onClick={() => navigate("/mascotas/nueva")}
+          >
             + Nueva Mascota
           </button>
         </div>
@@ -78,11 +84,11 @@ const MascotasPage = () => {
                     </td>
                   </tr>
                 ) : (
-                  mascotasFiltradas.map(mascota => (
+                  mascotasFiltradas.map((mascota) => (
                     <tr key={mascota.id}>
                       <td>{mascota.id}</td>
                       <td>
-                        <span 
+                        <span
                           className="nombre-link"
                           onClick={() => handleVerMascota(mascota.id)}
                         >
@@ -90,11 +96,13 @@ const MascotasPage = () => {
                         </span>
                       </td>
                       <td>{mascota.especie}</td>
-                      <td>{mascota.raza || '-'}</td>
+                      <td>{mascota.raza || "-"}</td>
                       <td>{mascota.sexo}</td>
-                      <td>{mascota.dueno_nombre} {mascota.dueno_apellido}</td>
                       <td>
-                        <button 
+                        {mascota.dueno_nombre} {mascota.dueno_apellido}
+                      </td>
+                      <td>
+                        <button
                           className="action-btn view-btn"
                           onClick={() => handleVerMascota(mascota.id)}
                         >

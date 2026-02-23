@@ -13,7 +13,7 @@
   color: var(--text);
   font-size: 32px;
   font-weight: 700;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   background: linear-gradient(135deg, var(--primary-light), var(--secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -134,7 +134,7 @@
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 2px solid var(--border);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .dueno-info {
@@ -172,7 +172,7 @@
   margin-bottom: 24px;
   padding-bottom: 16px;
   border-bottom: 2px solid var(--border);
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .no-mascotas {
@@ -203,7 +203,7 @@
 }
 
 .mascota-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -228,7 +228,7 @@
   color: var(--primary-light);
   font-size: 22px;
   margin-bottom: 16px;
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: "Space Grotesk", sans-serif;
 }
 
 .mascota-details {
@@ -309,11 +309,11 @@
   .search-input-group {
     flex-direction: column;
   }
-  
+
   .dueno-info {
     grid-template-columns: 1fr;
   }
-  
+
   .mascotas-grid {
     grid-template-columns: 1fr;
   }
