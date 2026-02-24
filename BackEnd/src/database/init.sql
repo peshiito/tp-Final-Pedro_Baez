@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS veterinaria_db;
-USE veterinaria_db;
+CREATE DATABASE IF NOT EXISTS patitas_felices_db;  
+USE patitas_felices_db;                            
 
 -- =========================
 -- ROLES
@@ -8,6 +8,8 @@ CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
+
+-- ... el resto del archivo igual (tablas, inserts, etc.) ...
 
 -- =========================
 -- USUARIOS
@@ -93,4 +95,4 @@ INSERT INTO roles (nombre) VALUES
 -- INSERTAR ADMIN (password: admin123)
 -- =========================
 INSERT INTO usuarios (nombre, apellido, email, password, rol_id) VALUES 
-('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$YourHashedPasswordHere', 1);
+('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$1FvuiwtNaF.1NQrNbBpzku8DBHHHVT4ex5aHPWIOpgDCUlC8xr.SG', 1);
