@@ -1,12 +1,16 @@
+name: tp-final-Pedro_Baez
+
 services:
-  # Servicio de MySQL
+  # =========================
+  # MySQL
+  # =========================
   mysql:
     image: mysql:8.0
-    container_name: tp_final_backend
+    container_name: tp-final-Pedro_Baez
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: curso_backend
+      MYSQL_DATABASE: vet_patitas_felices
       MYSQL_USER: curso_user
       MYSQL_PASSWORD: curso123
     ports:
@@ -15,7 +19,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - curso_network
+      - patitas_network
     healthcheck:
       test:
         [
@@ -32,10 +36,12 @@ services:
       timeout: 5s
       retries: 5
 
-  # Servicio de phpMyAdmin
+  # =========================
+  # phpMyAdmin
+  # =========================
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: patitas_felices
+    container_name: tp-final-Pedro_Baez-phpmyadmin
     restart: always
     environment:
       PMA_HOST: mysql
@@ -49,12 +55,18 @@ services:
       mysql:
         condition: service_healthy
     networks:
-      - curso_network
+      - patitas_network
 
+# =========================
+# Volúmenes
+# =========================
 volumes:
   mysql_data:
     driver: local
 
+# =========================
+# Red
+# =========================
 networks:
-  curso_network:
+  patitas_network:
     driver: bridge
