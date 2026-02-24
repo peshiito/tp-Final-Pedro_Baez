@@ -93,4 +93,4 @@ INSERT INTO roles (nombre) VALUES
 -- INSERTAR ADMIN (password: admin123)
 -- =========================
 INSERT INTO usuarios (nombre, apellido, email, password, rol_id) VALUES 
-('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$YourHashedPasswordHere', 1);
+('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$Bq4WKQrMfEslf8eeYzrPrOXVV3nECUtCcy1hjBAsaf1s9Os6Sp7ke', 1);

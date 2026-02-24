@@ -180,8 +180,14 @@ cp .env.example .env
 ## Instalar dependencias del backend
 
 ```bash
-npm install express cors dotenv mysql2 bcrypt jsonwebtoken
-npm install -D typescript ts-node-dev @types/node @types/express @types/cors @types/bcrypt @types/jsonwebtoken
+
+# Instalar dependencias de producción (versiones estables)
+npm install express@4.18.2 cors@2.8.5 dotenv@16.3.1 mysql2@3.6.0 bcrypt@5.1.1 jsonwebtoken@9.0.2 express-validator@7.0.1
+
+# Instalar dependencias de desarrollo (versiones estables)
+npm install -D typescript@5.2.2 ts-node@10.9.1 ts-node-dev@2.0.0 nodemon@3.0.1
+npm install -D @types/node@20.5.0 @types/express@4.17.17 @types/cors@2.8.13
+npm install -D @types/bcrypt@5.0.0 @types/jsonwebtoken@9.0.2 @types/mysql@2.15.21
 ```
 
 ## Ejecutar backend en desarrollo
@@ -208,8 +214,12 @@ cp .env.example .env
 ## Instalar dependencias del frontend
 
 ```bash
-npm install react react-dom react-router-dom axios
-npm install -D vite @vitejs/plugin-react
+
+# Instalar dependencias de producción
+npm install react@18.2.0 react-dom@18.2.0 react-router-dom@6.20.0 axios@1.6.2
+
+# Instalar dependencias de desarrollo
+npm install -D vite@4.5.3 @vitejs/plugin-react@4.0.0
 ```
 
 ## Ejecutar frontend en desarrollo
