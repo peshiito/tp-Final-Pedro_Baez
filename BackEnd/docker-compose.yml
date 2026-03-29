@@ -1,12 +1,11 @@
 services:
-  # Servicio de MySQL
   mysql:
     image: mysql:8.0
-    container_name: tp_final_backend
+    container_name: tp-final-Pedro_Baez
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: curso_backend
+      MYSQL_DATABASE: patitas_felices_db # 👈 CAMBIADO
       MYSQL_USER: curso_user
       MYSQL_PASSWORD: curso123
     ports:
@@ -15,7 +14,7 @@ services:
       - mysql_data:/var/lib/mysql
       - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - curso_network
+      - patitas_network
     healthcheck:
       test:
         [
@@ -32,29 +31,26 @@ services:
       timeout: 5s
       retries: 5
 
-  # Servicio de phpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: patitas_felices
+    container_name: tp-final-Pedro_Baez-phpmyadmin
     restart: always
     environment:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_USER: root
       PMA_PASSWORD: root123
-      MYSQL_ROOT_PASSWORD: root123
     ports:
       - "8080:80"
     depends_on:
       mysql:
         condition: service_healthy
     networks:
-      - curso_network
+      - patitas_network
 
 volumes:
   mysql_data:
-    driver: local
 
 networks:
-  curso_network:
+  patitas_network:
     driver: bridge

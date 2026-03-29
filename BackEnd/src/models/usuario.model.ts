@@ -1,7 +1,7 @@
 import { pool } from "../config/database";
 import { IUsuario } from "../interfaces";
 import { ResultSetHeader, RowDataPacket } from "mysql2";
-import { hashPassword } from "../utils/bcrypt.helper";
+import { hashPassword, comparePassword } from "../utils/bcrypt.helper";
 
 export class UsuarioModel {
   static async create(usuario: Partial<IUsuario>): Promise<number> {
@@ -39,6 +39,26 @@ export class UsuarioModel {
     return rows[0] || null;
   }
 
+  static async findAll(): Promise<(IUsuario & RowDataPacket)[]> {
+    const [rows] = await pool.execute<(IUsuario & RowDataPacket)[]>(
+      "SELECT id, nombre, apellido, email, direccion, rol_id, activo, creado_en FROM usuarios WHERE activo = true ORDER BY id DESC",
+    );
+
+    return rows;
+  }
+
+  // NUEVO MÉTODO: Obtener usuarios por rol
+  static async findByRol(rolId: number): Promise<(IUsuario & RowDataPacket)[]> {
+    const [rows] = await pool.execute<(IUsuario & RowDataPacket)[]>(
+      `SELECT id, nombre, apellido, email, direccion, rol_id, activo, creado_en 
+       FROM usuarios 
+       WHERE activo = true AND rol_id = ?
+       ORDER BY nombre ASC`,
+      [rolId],
+    );
+    return rows;
+  }
+
   static async getRolId(rolNombre: string): Promise<number | null> {
     const [rows] = await pool.execute<RowDataPacket[]>(
       "SELECT id FROM roles WHERE nombre = ?",
@@ -53,5 +73,17 @@ export class UsuarioModel {
       [rolId],
     );
     return rows[0]?.nombre || null;
+  }
+
+  static async verifyPassword(
+    email: string,
+    password: string,
+  ): Promise<IUsuario | null> {
+    const usuario = await this.findByEmail(email);
+
+    if (!usuario) return null;
+
+    const valid = await comparePassword(password, usuario.password);
+    return valid ? usuario : null;
   }
 }

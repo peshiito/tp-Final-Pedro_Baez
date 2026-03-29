@@ -1,0 +1,457 @@
+.veterinario-dashboard {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Welcome Header */
+.welcome-header {
+  background: linear-gradient(135deg, var(--surface), var(--surface-light));
+  border-radius: 24px;
+  padding: 30px;
+  margin-bottom: 30px;
+  border: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.welcome-text h1 {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+
+.user-name-highlight {
+  background: linear-gradient(135deg, #10b981, #34d399);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.welcome-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+  text-transform: capitalize;
+}
+
+/* Buscador rápido */
+.quick-search {
+  display: flex;
+  gap: 10px;
+  background: var(--surface-light);
+  padding: 5px;
+  border-radius: 50px;
+  border: 1px solid var(--border);
+}
+
+.quick-search .search-input {
+  background: transparent;
+  border: none;
+  padding: 12px 20px;
+  color: var(--text-primary);
+  font-size: 14px;
+  min-width: 300px;
+}
+
+.quick-search .search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.quick-search .search-input:focus {
+  outline: none;
+}
+
+.quick-search .search-button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.2s ease;
+}
+
+.quick-search .search-button:hover {
+  background: var(--primary-dark);
+  transform: scale(1.05);
+}
+
+.quick-search .search-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tarjeta de Consultas Hoy */
+.stat-card.today {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+/* Tarjeta de Esta Semana */
+.stat-card.week {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+/* Tarjeta de Total */
+.stat-card.total {
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+}
+
+.stat-card .stat-icon {
+  font-size: 42px;
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.stat-card .stat-content {
+  flex: 1;
+}
+
+.stat-card .stat-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.stat-card .stat-value {
+  display: block;
+  font-size: 38px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.stat-card .stat-trend {
+  font-size: 13px;
+  padding: 4px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  white-space: nowrap;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Quick Actions */
+.quick-actions-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 2px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.action-card {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.action-card.primary:hover {
+  border-color: #10b981;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+.action-card.secondary:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+}
+
+.action-header {
+  margin-bottom: 16px;
+}
+
+.action-icon {
+  font-size: 36px;
+  background: var(--surface-light);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+}
+
+.action-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.action-description {
+  color: var(--text-secondary);
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.action-footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.action-link {
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.action-card:hover .action-link {
+  color: #10b981;
+  transform: translateX(4px);
+}
+
+/* Consultas recientes */
+.recientes-section {
+  margin-top: 40px;
+}
+
+.consultas-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.consulta-card {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.consulta-card:hover {
+  transform: translateY(-4px);
+  border-color: #10b981;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  background: var(--surface-light);
+}
+
+.consulta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.consulta-fecha {
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.consulta-tipo {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.consulta-tipo.consulta {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+
+.consulta-tipo.vacuna {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+
+.consulta-tipo.cirugia {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.consulta-tipo.control {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+
+.consulta-body {
+  margin-bottom: 12px;
+}
+
+.mascota-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mascota-info strong {
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.mascota-info span {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.dueno-info small {
+  color: var(--text-secondary);
+  font-size: 12px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.consulta-diagnostico {
+  color: var(--text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.consulta-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.ver-detalle {
+  color: #10b981;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.consulta-card:hover .ver-detalle {
+  transform: translateX(4px);
+}
+
+/* Loading */
+.dashboard-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px;
+  background: var(--surface);
+  border-radius: 24px;
+  border: 1px solid var(--border);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--border-light);
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+.loading-spinner + p {
+  color: var(--text-secondary);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .veterinario-dashboard {
+    padding: 16px;
+  }
+
+  .welcome-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .quick-search {
+    width: 100%;
+  }
+
+  .quick-search .search-input {
+    min-width: auto;
+    flex: 1;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .consultas-list {
+    grid-template-columns: 1fr;
+  }
+
+  .actions-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -16,9 +16,12 @@ export class AuthController {
     try {
       const { email, password }: LoginDTO = req.body;
 
+      console.log("Login intentado para email:", email);
+
       // Buscar usuario por email
       const usuario = await UsuarioModel.findByEmail(email);
       if (!usuario) {
+        console.log("Usuario no encontrado");
         return res
           .status(401)
           .json({ message: "Email o contraseña incorrectos" });
@@ -27,6 +30,7 @@ export class AuthController {
       // Verificar contraseña
       const isValidPassword = await comparePassword(password, usuario.password);
       if (!isValidPassword) {
+        console.log("Contraseña incorrecta");
         return res
           .status(401)
           .json({ message: "Email o contraseña incorrectos" });
@@ -34,24 +38,29 @@ export class AuthController {
 
       // Obtener nombre del rol
       const rolNombre = await UsuarioModel.getRolName(usuario.rol_id);
+      console.log("Rol del usuario:", rolNombre);
 
       // Obtener perfil según rol
       let perfilId = null;
       if (rolNombre === "DUENO") {
         const dueno = await DuenoModel.findByUsuarioId(usuario.id!);
         perfilId = dueno?.id;
+        console.log("Perfil ID dueño:", perfilId);
       } else if (rolNombre === "VETERINARIO") {
         const veterinario = await VeterinarioModel.findByUsuarioId(usuario.id!);
         perfilId = veterinario?.id;
+        console.log("Perfil ID veterinario:", perfilId);
       }
 
-      // Generar token
+      // Generar token con perfilId incluido
       const token = generateToken({
         id: usuario.id!,
         email: usuario.email,
         rol: rolNombre!,
-        perfilId,
+        perfilId: perfilId,
       });
+
+      console.log("Token generado con perfilId:", perfilId);
 
       res.json({
         message: "Login exitoso",
@@ -62,6 +71,7 @@ export class AuthController {
           apellido: usuario.apellido,
           email: usuario.email,
           rol: rolNombre,
+          perfilId: perfilId,
         },
       });
     } catch (error) {
@@ -70,7 +80,7 @@ export class AuthController {
     }
   }
 
-  // Registrar un dueño (acceso público)
+  // Registrar un dueño (solo admin)
   static async registerDueno(req: Request, res: Response) {
     try {
       const data: RegisterDuenoDTO = req.body;

@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS veterinaria_db;
-USE veterinaria_db;
+CREATE DATABASE IF NOT EXISTS patitas_felices_db;  
+USE patitas_felices_db;                            
 
 -- =========================
 -- ROLES
@@ -8,6 +8,8 @@ CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL UNIQUE
 );
+
+-- ... el resto del archivo igual (tablas, inserts, etc.) ...
 
 -- =========================
 -- USUARIOS
@@ -48,12 +50,9 @@ CREATE TABLE veterinarios (
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
-
 -- =========================
 -- MASCOTAS
 -- =========================
-
-
 CREATE TABLE IF NOT EXISTS mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -68,6 +67,23 @@ CREATE TABLE IF NOT EXISTS mascotas (
 );
 
 -- =========================
+-- HISTORIALES CLINICOS
+-- =========================
+CREATE TABLE IF NOT EXISTS historiales_clinicos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    mascota_id INT NOT NULL,
+    veterinario_id INT NOT NULL,
+    fecha DATE NOT NULL,
+    tipo ENUM('CONSULTA', 'VACUNA', 'CIRUGIA', 'CONTROL') NOT NULL,
+    diagnostico TEXT NOT NULL,
+    tratamiento TEXT,
+    observaciones TEXT,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (mascota_id) REFERENCES mascotas(id) ON DELETE CASCADE,
+    FOREIGN KEY (veterinario_id) REFERENCES veterinarios(id) ON DELETE RESTRICT
+);
+
+-- =========================
 -- INSERTAR ROLES
 -- =========================
 INSERT INTO roles (nombre) VALUES 
@@ -79,4 +95,4 @@ INSERT INTO roles (nombre) VALUES
 -- INSERTAR ADMIN (password: admin123)
 -- =========================
 INSERT INTO usuarios (nombre, apellido, email, password, rol_id) VALUES 
-('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$YourHashedPasswordHere', 1);
+('Admin', 'Principal', 'admin@veterinaria.com', '$2b$10$1FvuiwtNaF.1NQrNbBpzku8DBHHHVT4ex5aHPWIOpgDCUlC8xr.SG', 1);
